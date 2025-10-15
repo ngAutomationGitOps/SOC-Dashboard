@@ -19,12 +19,12 @@ export default function SODashboard() {
         </div>
  <SO_SummaryCards />
         {/* Row 1: Summary Cards + World Map + Severity Donut */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
           {/* <SO_SummaryCards /> */}
           {/* <SO_WorldMap /> */}
           <SO_SeverityDonut />
           <SO_WorldMap />
-          <SO_RuleTagsDonut />
+          {/* <SO_RuleTagsDonut /> */}
 
         </div>
 

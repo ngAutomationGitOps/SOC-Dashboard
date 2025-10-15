@@ -11,23 +11,20 @@ import {
 import { geoCentroid } from 'd3-geo';
 import { feature } from 'topojson-client';
 
-// Higher detail map
 const topoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json';
 
-// Country name fixes for TopoJSON mismatch
 const COUNTRY_NAME_MAP: Record<string, string> = {
   'United States': 'United States of America',
-  'Russia': 'Russian Federation',
+  Russia: 'Russian Federation',
   'Czech Republic': 'Czechia',
-  'Syria': 'Syrian Arab Republic',
+  Syria: 'Syrian Arab Republic',
   'Côte d’Ivoire': "Cote d'Ivoire",
   'Cote dIvoire': "Cote d'Ivoire",
 };
 
-// Fallback coords for microstates
 const FALLBACK_COORDS: Record<string, [number, number]> = {
-  'Singapore': [103.8198, 1.3521],
-  'Monaco': [7.4246, 43.7384],
+  Singapore: [103.8198, 1.3521],
+  Monaco: [7.4246, 43.7384],
   'Vatican City': [12.4534, 41.9029],
 };
 
@@ -37,7 +34,6 @@ export default function EventMap() {
   const [eventData, setEventData] = useState<EventRow[]>([]);
   const [geoFeatures, setGeoFeatures] = useState<any[]>([]);
 
-  // Normalize strings for matching
   const norm = (s: string) =>
     s
       .normalize('NFKD')
@@ -46,7 +42,6 @@ export default function EventMap() {
       .replace(/[^a-z]/g, '');
 
   useEffect(() => {
-    // 1) Fetch API data
     fetch(`${process.env.NEXT_PUBLIC_API_BASE}/so-events-map`)
       .then((res) => res.json())
       .then((apiData) => {
@@ -60,7 +55,6 @@ export default function EventMap() {
       })
       .catch((err) => console.error('Error fetching event map data:', err));
 
-    // 2) Fetch topojson & convert
     fetch(topoUrl)
       .then((res) => res.json())
       .then((topology) => {
@@ -70,7 +64,6 @@ export default function EventMap() {
       .catch((err) => console.error('Error fetching geo data:', err));
   }, []);
 
-  // Match API country names to GeoJSON features
   const matchGeo = (apiName: string) => {
     if (!geoFeatures.length) return undefined;
     const targetName = COUNTRY_NAME_MAP[apiName] || apiName;
@@ -107,52 +100,44 @@ export default function EventMap() {
   return (
     <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200 w-full">
       <h2 className="text-lg font-semibold mb-4">Event Map</h2>
-      <div className="w-full h-[400px] md:h-[400px] xl:h-[450px]">
+      <div className="w-full h-[500px]"> {/* bigger height for full map */}
         <ComposableMap
           projection="geoMercator"
-          width={800}
-          height={400}
+          projectionConfig={{ scale: 150 }} // keeps world fit
+          width={980}
+          height={500}
           style={{ width: '100%', height: '100%' }}
         >
-          <ZoomableGroup zoom={1}>
+          <ZoomableGroup zoom={1} center={[0, 20]}> {/* center whole world */}
             {geoFeatures.length > 0 && (
-              // <Geographies geography={{ type: 'FeatureCollection', features: geoFeatures }}>
-              //   {({ geographies }) =>
-              //     geographies.map((geo) => {
-              //       const isEventCountry = highlightedNames.has(geo.properties.name);
-              //       return (
-              //         <Geography
-              //           key={geo.rsmKey}
-              //           geography={geo}
-              //           style={{
-              //             default: { fill: isEventCountry ? '#3b82f6' : '#E5E7EB', outline: 'none' },
-              //             hover: { fill: isEventCountry ? '#2563eb' : '#d1d5db', outline: 'none' },
-              //             pressed: { fill: '#1d4ed8', outline: 'none' },
-              //           }}
-              //         />
-              //       );
-              //     })
-              //   }
-              // </Geographies>
-              <Geographies geography={{ type: 'FeatureCollection', features: geoFeatures }}>
-  {({ geographies }: { geographies: any[] }) =>
-    geographies.map((geo: any) => {
-      const isEventCountry = highlightedNames.has(geo.properties.name);
-      return (
-        <Geography
-          key={geo.rsmKey}
-          geography={geo}
-          style={{
-            default: { fill: isEventCountry ? '#3b82f6' : '#E5E7EB', outline: 'none' },
-            hover: { fill: isEventCountry ? '#2563eb' : '#d1d5db', outline: 'none' },
-            pressed: { fill: '#1d4ed8', outline: 'none' },
-          }}
-        />
-      );
-    })
-  }
-</Geographies>
-
+              <Geographies
+                geography={{ type: 'FeatureCollection', features: geoFeatures }}
+              >
+                {({ geographies }: { geographies: any[] }) =>
+                  geographies.map((geo: any) => {
+                    const isEventCountry = highlightedNames.has(
+                      geo.properties.name
+                    );
+                    return (
+                      <Geography
+                        key={geo.rsmKey}
+                        geography={geo}
+                        style={{
+                          default: {
+                            fill: isEventCountry ? '#3b82f6' : '#E5E7EB',
+                            outline: 'none',
+                          },
+                          hover: {
+                            fill: isEventCountry ? '#2563eb' : '#d1d5db',
+                            outline: 'none',
+                          },
+                          pressed: { fill: '#1d4ed8', outline: 'none' },
+                        }}
+                      />
+                    );
+                  })
+                }
+              </Geographies>
             )}
 
             {/* Markers */}
@@ -163,8 +148,21 @@ export default function EventMap() {
                 const [lng, lat] = geoCentroid(matchedGeo);
                 return (
                   <Marker key={`${row.country}-${idx}`} coordinates={[lng, lat]}>
-                    <circle r={6} fill="#ef4444" stroke="#fff" strokeWidth={1.5} />
-                    <text textAnchor="middle" y={-10} style={{ fontFamily: 'sans-serif', fontSize: 12 }}>
+                    <circle
+                      r={6}
+                      fill="#ef4444"
+                      stroke="#fff"
+                      strokeWidth={1.5}
+                    />
+                    <text
+                      textAnchor="middle"
+                      y={-10}
+                      style={{
+                        fontFamily: 'sans-serif',
+                        fontSize: 12,
+                        fill: '#111',
+                      }}
+                    >
                       {`${row.country} (${row.count})`}
                     </text>
                   </Marker>
@@ -174,9 +172,25 @@ export default function EventMap() {
               const fallback = FALLBACK_COORDS[row.country];
               if (fallback) {
                 return (
-                  <Marker key={`${row.country}-${idx}-fallback`} coordinates={fallback}>
-                    <circle r={6} fill="#ef4444" stroke="#fff" strokeWidth={1.5} />
-                    <text textAnchor="middle" y={-10} style={{ fontFamily: 'sans-serif', fontSize: 12 }}>
+                  <Marker
+                    key={`${row.country}-${idx}-fallback`}
+                    coordinates={fallback}
+                  >
+                    <circle
+                      r={6}
+                      fill="#ef4444"
+                      stroke="#fff"
+                      strokeWidth={1.5}
+                    />
+                    <text
+                      textAnchor="middle"
+                      y={-10}
+                      style={{
+                        fontFamily: 'sans-serif',
+                        fontSize: 12,
+                        fill: '#111',
+                      }}
+                    >
                       {`${row.country} (${row.count})`}
                     </text>
                   </Marker>

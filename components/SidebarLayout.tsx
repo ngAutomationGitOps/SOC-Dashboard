@@ -6,13 +6,14 @@ import { ReactNode } from 'react';
 import Image from 'next/image';
 
 const menuItems = [
-  // { title: 'Dashboard', href: '/dashboard' }, 
+  { title: 'Dashboard', href: '/dashboard' }, 
   { title: 'Vulnerability', href: '/vulnerability' },
   // { title: 'ASM', href: '/ASM' },
   { title: 'SO', href: '/so' },
   { title: 'Event', href: '/events' },
   { title: 'Fim', href: '/fim' },
   { title: 'Agent', href: '/agent' },
+  { title: 'ASM', href: '/asm' },
   // { title: 'DW', href: '/dw' },
   // { title: 'SO', href: '/so' },  
   { title: 'Settings', href: '/settings' },
