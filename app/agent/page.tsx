@@ -17,32 +17,36 @@ export default function DashboardPage() {
 
   return (
     <SidebarLayout>
-      <div style={styles.page}>
-        <div style={styles.navbar}>
-          <h1 style={styles.title}>Agent Dashboard</h1>
+      <div className="space-y-6 animate-fade-in">
+        {/* Header */}
+        <div className="card card-hover">
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
+            Agent Dashboard
+          </h1>
+          <p className="text-gray-600 text-sm lg:text-base">
+            Agent deployment and monitoring across your infrastructure
+          </p>
         </div>
 
-        {/* ✅ CounterCards full-width */}
-        <div style={{ width: '100%' }}>
-          <AgentCounterCards/>
-        </div>
+        {/* Counter Cards */}
+        <AgentCounterCards />
 
-        {/* ✅ One row with EnvironmentPie, SeverityBar, EnvironmentPie */}
-        <div style={styles.threeGrid}>
-          <div style={styles.card}>
+        {/* Charts Row - Responsive */}
+        <div className="grid-responsive-3 section-spacing">
+          <div className="card card-hover">
             <AgentDepartmentEnvironmentPie />
           </div>
-          <div style={styles.card}>
+          <div className="card card-hover">
             <AgentSeverityBar />
           </div>
-          <div style={styles.card}>
+          <div className="card card-hover">
             <AgentServerEnvironmentPie />
           </div>
         </div>
 
-        {/* ✅ CVE Details Table full width */}
-        <div style={{ ...styles.card, overflowX: 'auto', width: '100%' }}>
-          <div style={{ minWidth: '100%', overflowX: 'auto' }}>
+        {/* CVE Details Table - Full Width */}
+        <div className="card card-hover">
+          <div className="mobile-scroll">
             <AgentCveDetailsTable />
           </div>
         </div>

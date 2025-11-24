@@ -239,37 +239,42 @@ export default function DashboardPage() {
 
   return (
     <SidebarLayout>
-      <div style={styles.page}>
-        {/* Navbar */}
-        <div style={styles.navbar}>
-          <h1 style={styles.title}>Attack Surface Management</h1>
+      <div className="space-y-6 animate-fade-in">
+        {/* Header */}
+        <div className="card card-hover">
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
+            Attack Surface Management
+          </h1>
+          <p className="text-gray-600 text-sm lg:text-base">
+            Monitor and manage your attack surface vulnerabilities
+          </p>
         </div>
 
-        {/* ✅ CounterCards and Ports Row */}
-        <div style={{ width: '100%' }}>
+        {/* Counter Cards and Ports Row */}
+        <div className="space-y-6">
           <CounterCards />
           <PortsRow />
         </div>
 
-        {/* ✅ 3-Grid Row */}
-        <div style={styles.threeGrid}>
-          <div style={styles.card}>
+        {/* Three Column Grid - Responsive */}
+        <div className="grid-responsive-3 section-spacing">
+          <div className="card card-hover">
             <VulnerabilityScoreTable />
           </div>
-          <div style={styles.card}>
+          <div className="card card-hover">
             <VulnerabilitiesChart />
           </div>
-          <div style={styles.card}>
+          <div className="card card-hover">
             <AgentServerEnvironmentPie />
           </div>
         </div>
 
-        {/* ✅ 2-Grid Row */}
-        <div style={styles.twoGrid}>
-          <div style={styles.card}>
+        {/* Two Column Grid - Responsive */}
+        <div className="grid-responsive-2">
+          <div className="card card-hover">
             <SSLStatusTable />
           </div>
-          <div style={styles.card}>
+          <div className="card card-hover">
             <PortsSummary />
           </div>
         </div>
@@ -277,46 +282,3 @@ export default function DashboardPage() {
     </SidebarLayout>
   );
 }
-
-const styles: { [key: string]: React.CSSProperties } = {
-  page: {
-    padding: '24px',
-    backgroundColor: '#f3f4f6',
-    minHeight: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '24px',
-  },
-  navbar: {
-    backgroundColor: '#ffffff',
-    padding: '16px 24px',
-    borderRadius: '12px',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-    border: '1px solid #e5e7eb',
-    textAlign: 'left',
-  },
-  title: {
-    fontSize: '26px',
-    fontWeight: 700,
-    color: '#1f2937',
-    margin: 0,
-  },
-  threeGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
-    gap: '24px',
-  },
-  twoGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '24px',
-  },
-  card: {
-    backgroundColor: '#ffffff',
-    borderRadius: '12px',
-    boxShadow: '0 1px 4px rgba(0, 0, 0, 0.1)',
-    border: '1px solid #e5e7eb',
-    padding: '20px',
-    marginBottom: '24px',
-  },
-};

@@ -102,66 +102,51 @@ import SidebarLayout from '@/components/SidebarLayout';
 export default function SODashboard() {
   return (
     <SidebarLayout>
-      <main className="p-6 bg-gray-100 min-h-screen space-y-6">
-        {/* 🔳 Navbar */}
-        <div className="bg-white p-4 rounded-xl shadow border border-gray-200">
-          <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
+      <div className="space-y-6 animate-fade-in">
+        {/* Header */}
+        <div className="card card-hover">
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
+            Security Operations Dashboard
+          </h1>
+          <p className="text-gray-600 text-sm lg:text-base">
+            Comprehensive view of your security operations and threat landscape
+          </p>
         </div>
 
-        {/* Row 1: Multi-Metric Chart + World Map */}
-        <div className="grid grid-cols-12 gap-4">
-          {/* Make Pie Chart wider */}
-          <div className="col-span-7">
+        {/* Main Charts Row - Responsive */}
+        <div className="grid-responsive-2 section-spacing">
+          <div className="card card-hover">
             <DA_Multi_metric />
           </div>
-
-          {/* Make World Map smaller */}
-          <div className="col-span-5">
+          <div className="card card-hover">
             <SO_WorldMap />
           </div>
         </div>
 
-        {/* Row 2: Donut Charts in One Line */}
-        {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white p-4 rounded-xl shadow border border-gray-200">
+        {/* Metrics Cards - Fully Responsive */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 section-spacing">
+          <div className="card card-hover">
             <StatusCodeDonut />
           </div>
-          <div className="bg-white p-4 rounded-xl shadow border border-gray-200">
+          <div className="card card-hover">
             <StatusCodeDonut />
           </div>
-          <div className="bg-white p-4 rounded-xl shadow border border-gray-200">
+          <div className="card card-hover">
             <StatusCodeDonut />
           </div>
-          <div className="bg-white p-4 rounded-xl shadow border border-gray-200">
+          <div className="card card-hover">
             <StatusCodeDonut />
           </div>
-                    <div className="bg-white p-4 rounded-xl shadow border border-gray-200">
+          <div className="card card-hover">
             <DA_GeoPairsBarChart />
           </div>
-        </div> */}
-
-        {/* <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-  <StatusCodeDonut />
-  <StatusCodeDonut />
-  <StatusCodeDonut />
-  <StatusCodeDonut />
-  <DA_GeoPairsBarChart />
-</div> */}
-
-<div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-4">
-  <StatusCodeDonut /> 
-  <StatusCodeDonut />
-  <StatusCodeDonut />
-  <StatusCodeDonut />
-  <DA_GeoPairsBarChart />
-</div>
-
-
-        {/* Row 3: Connections Table (Full Width) */}
-        <div className="w-full">
-          {/* <SO_ConnectionsTable /> */}
         </div>
-      </main>
+
+        {/* Tables Section - Full Width */}
+        <div className="space-y-4">
+          {/* Future: SO_ConnectionsTable can go here */}
+        </div>
+      </div>
     </SidebarLayout>
   );
 }

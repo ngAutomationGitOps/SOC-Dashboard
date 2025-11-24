@@ -127,25 +127,25 @@ export default function SO_SummaryCards() {
   }, []);
 
   return (
-    <div className="grid grid-cols-4 gap-4 w-full">
-      <div className="bg-white rounded-xl shadow p-3 text-center outline outline-1 flex flex-col items-center justify-center">
-        <div className="text-base text-gray-500 font-medium">Total Alerts</div>
-        <div className="text-3xl font-bold mt-1">{totalAlerts.toLocaleString()}</div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+      <div className="card card-hover p-4 text-center flex flex-col items-center justify-center">
+        <div className="text-sm lg:text-base text-gray-600 font-medium mb-2">Total Alerts</div>
+        <div className="text-2xl lg:text-3xl font-bold text-gray-900">{totalAlerts.toLocaleString()}</div>
       </div>
 
-      <div className="bg-white rounded-xl shadow p-3 text-center outline outline-1 flex flex-col items-center justify-center">
-        <div className="text-base text-gray-500 font-medium">High Severity Alerts</div>
-        <div className="text-3xl font-bold text-red-600 mt-1">{highSeverity.toLocaleString()}</div>
+      <div className="card card-hover p-4 text-center flex flex-col items-center justify-center">
+        <div className="text-sm lg:text-base text-gray-600 font-medium mb-2">High Severity Alerts</div>
+        <div className="text-2xl lg:text-3xl font-bold text-red-600">{highSeverity.toLocaleString()}</div>
       </div>
 
-      <div className="bg-white rounded-xl shadow p-3 text-center outline outline-1 flex flex-col items-center justify-center">
-        <div className="text-base text-gray-500 font-medium">Unique Source IPs</div>
-        <div className="text-3xl font-bold text-yellow-600 mt-1">{uniqueSourceIPs.toLocaleString()}</div>
+      <div className="card card-hover p-4 text-center flex flex-col items-center justify-center">
+        <div className="text-sm lg:text-base text-gray-600 font-medium mb-2">Unique Source IPs</div>
+        <div className="text-2xl lg:text-3xl font-bold text-yellow-600">{uniqueSourceIPs.toLocaleString()}</div>
       </div>
 
-      <div className="bg-white rounded-xl shadow p-3 text-center outline outline-1 flex flex-col items-center justify-center">
-        <div className="text-base text-gray-500 font-medium">Unique Destination IPs</div>
-        <div className="text-3xl font-bold text-blue-600 mt-1">{uniqueDestinationIPs.toLocaleString()}</div>
+      <div className="card card-hover p-4 text-center flex flex-col items-center justify-center">
+        <div className="text-sm lg:text-base text-gray-600 font-medium mb-2">Unique Destination IPs</div>
+        <div className="text-2xl lg:text-3xl font-bold text-blue-600">{uniqueDestinationIPs.toLocaleString()}</div>
       </div>
     </div>
   );

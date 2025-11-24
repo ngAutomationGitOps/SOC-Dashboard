@@ -2196,19 +2196,20 @@ export default function FimDetailsTableUI() {
   );
 
   return (
-    <div className="bg-white rounded-xl shadow p-4 border overflow-x-auto">
+    <div className="card card-hover p-4 lg:p-6">
       {/* Tabs */}
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex space-x-2">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={() => {
               setActiveTab("Application Issue");
               setCurrentPage(1);
             }}
-            className={`px-6 py-2 font-semibold rounded-md text-white cursor-pointer ${
-              activeTab === "Application Issue" ? "" : "opacity-60"
+            className={`px-4 py-2 text-sm font-semibold rounded-lg transition-colors duration-200 ${
+              activeTab === "Application Issue"
+                ? "bg-blue-600 text-white shadow-sm"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
-            style={{ backgroundColor: "rgb(59, 130, 246)" }}
           >
             Application Issue
           </button>
@@ -2217,8 +2218,10 @@ export default function FimDetailsTableUI() {
               setActiveTab("OS Issue");
               setCurrentPage(1);
             }}
-            className={`px-6 py-2 font-semibold rounded-md text-white cursor-pointer ${
-              activeTab === "OS Issue" ? "" : "opacity-60"
+            className={`px-4 py-2 text-sm font-semibold rounded-lg transition-colors duration-200 ${
+              activeTab === "OS Issue"
+                ? "bg-blue-600 text-white shadow-sm"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
             style={{ backgroundColor: "rgb(59, 130, 246)" }}
           >
@@ -2261,7 +2264,7 @@ export default function FimDetailsTableUI() {
             onChange={(e) =>
               setFilters({ ...filters, environment: e.target.value })
             }
-            className="border px-3 py-2 rounded bg-gray-100 text-gray-700 cursor-pointer"
+            className="border px-3 py-2 rounded-lg bg-gray-50 text-gray-700 cursor-pointer focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 text-sm"
           >
             <option value="">Environment</option>
             {[...new Set(data.map((d) => d.environment))].map((env) => (
@@ -2276,7 +2279,7 @@ export default function FimDetailsTableUI() {
             onChange={(e) =>
               setFilters({ ...filters, department: e.target.value })
             }
-            className="border px-3 py-2 rounded bg-gray-100 text-gray-700 cursor-pointer"
+            className="border px-3 py-2 rounded-lg bg-gray-50 text-gray-700 cursor-pointer focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 text-sm"
           >
             <option value="">Department</option>
             {[...new Set(data.map((d) => d.department))].map((dept) => (
@@ -2303,54 +2306,73 @@ export default function FimDetailsTableUI() {
 
       {/* Table */}
       {loading ? (
-        <div className="text-center p-6 text-gray-500">Loading events...</div>
+        <div className="text-center p-6 text-gray-500 animate-pulse">Loading events...</div>
       ) : (
         <>
-          <table className="min-w-full text-sm border border-gray-300">
-            <thead>
-              <tr className="bg-gray-300 text-gray-800 text-left">
-                <th className="p-2">Timestamp</th>
-                <th className="p-2">Agent Name</th>
-                <th className="p-2">Event</th>
-                <th className="p-2">Severity</th>
-                <th className="p-2">Department</th>
-                <th className="p-2">Server</th>
-                <th className="p-2">Environment</th>
-                <th className="p-2">Rule Description</th>
-                <th className="p-2">Syscheck Path</th>
-              </tr>
-            </thead>
+          <div className="mobile-scroll">
+            <table className="min-w-full text-xs lg:text-sm border border-gray-200 rounded-lg overflow-hidden">
+              <thead>
+                <tr className="bg-gray-50 text-gray-700 border-b border-gray-200">
+                  <th className="p-3 text-left font-semibold mobile-text-sm">Timestamp</th>
+                  <th className="p-3 text-left font-semibold mobile-text-sm">Agent</th>
+                  <th className="p-3 text-left font-semibold mobile-text-sm">Event</th>
+                  <th className="p-3 text-left font-semibold mobile-text-sm">Severity</th>
+                  <th className="p-3 text-left font-semibold mobile-text-sm hidden sm:table-cell">Dept</th>
+                  <th className="p-3 text-left font-semibold mobile-text-sm hidden md:table-cell">Server</th>
+                  <th className="p-3 text-left font-semibold mobile-text-sm hidden lg:table-cell">Env</th>
+                  <th className="p-3 text-left font-semibold mobile-text-sm">Description</th>
+                  <th className="p-3 text-left font-semibold mobile-text-sm hidden xl:table-cell">Path</th>
+                </tr>
+              </thead>
             <tbody>
               {paginatedData.length > 0 ? (
                 paginatedData.map((row, idx) => (
                   <tr
                     key={idx}
-                    className={
-                      idx % 2 === 0 ? "bg-white border-t" : "bg-gray-50 border-t"
-                    }
+                    className={`hover:bg-gray-50 transition-colors duration-150 ${
+                      idx % 2 === 0 ? "bg-white" : "bg-gray-25"
+                    } border-b border-gray-100`}
                   >
-                    <td className="p-2">{row.detected_at}</td>
-                    <td className="p-2">{row.agent_name}</td>
-                    <td className="p-2">{row.event}</td>
-                    <td className="p-2">
+                    <td className="p-3 text-gray-600 mobile-text-sm">
+                      {new Date(row.detected_at).toLocaleString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false
+                      })}
+                    </td>
+                    <td className="p-3 font-medium text-gray-900 mobile-text-sm">{row.agent_name}</td>
+                    <td className="p-3 mobile-text-sm">
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        row.event === 'modified' ? 'bg-yellow-100 text-yellow-800' :
+                        row.event === 'added' ? 'bg-green-100 text-green-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {row.event}
+                      </span>
+                    </td>
+                    <td className="p-3">
                       <span
-                        className="px-2 py-1 rounded text-xs font-semibold"
+                        className="px-2 py-1 rounded-full text-xs font-semibold text-white"
                         style={{
                           backgroundColor:
                             severityColors[row.severity] ||
                             severityColors.Default,
-                          color:
-                            row.severity === "Medium" ? "black" : "white",
                         }}
                       >
                         {row.severity}
                       </span>
                     </td>
-                    <td className="p-2">{row.department}</td>
-                    {/* <td className="p-2">{row.server_owner}</td> */}
-                    <td className="p-2">{row.environment}</td>
-                    <td className="p-2">{row.description}</td>
-                    <td className="p-2">{row.path}</td>
+                    <td className="p-3 hidden sm:table-cell mobile-text-sm text-gray-600">{row.department}</td>
+                    <td className="p-3 hidden md:table-cell mobile-text-sm text-gray-600">{row.server_owner}</td>
+                    <td className="p-3 hidden lg:table-cell mobile-text-sm text-gray-600">{row.environment}</td>
+                    <td className="p-3 mobile-text-sm text-gray-700 max-w-xs truncate" title={row.description}>
+                      {row.description}
+                    </td>
+                    <td className="p-3 hidden xl:table-cell mobile-text-sm text-gray-600 font-mono text-xs max-w-xs truncate" title={row.path}>
+                      {row.path}
+                    </td>
                   </tr>
                 ))
               ) : (
@@ -2362,6 +2384,7 @@ export default function FimDetailsTableUI() {
               )}
             </tbody>
           </table>
+          </div>
 
           {/* Pagination */}
           <div className="flex justify-between items-center mt-4">

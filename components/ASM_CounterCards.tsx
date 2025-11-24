@@ -112,26 +112,26 @@ function Counter({ value }: { value: number }) {
 
 export default function CounterCards() {
   const counters = [
-    { label: "Total Domains", value: 12, color: "#ee3e32" },
-    { label: "Total IPs", value: 25, color: "#1d4877" },
-    { label: "SSL Issues", value: 5, color: "#fbb021" },
-    { label: "Critical Vulnerabilities", value: 3, color: "#ee3e32" },  
-    { label: "Open Ports", value: 48, color: "#f68838" },
-    { label: "Outdated Tech", value: 4, color: "#1d4877" },
+    { label: "Total Domains", value: 12, color: "text-red-500" },
+    { label: "Total IPs", value: 25, color: "text-blue-700" },
+    { label: "SSL Issues", value: 5, color: "text-yellow-500" },
+    { label: "Critical Vulnerabilities", value: 3, color: "text-red-500" },
+    { label: "Open Ports", value: 48, color: "text-orange-500" },
+    { label: "Outdated Tech", value: 4, color: "text-blue-700" },
   ];
 
   return (
-    <div className="w-full px-4">
-      <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(180px,1fr))]">
+    <div className="w-full">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         {counters.map((item, idx) => (
           <div
             key={idx}
-            className="bg-white rounded-xl shadow p-6 text-center border border-black hover:shadow-lg transition"
+            className="card card-hover text-center p-6 bg-white border-gray-200"
           >
-            <h3 className="text-sm text-gray-500 font-semibold mb-2">
+            <h3 className="text-sm text-gray-600 font-medium mb-3 mobile-text-sm">
               {item.label}
             </h3>
-            <p className="text-3xl font-bold" style={{ color: item.color }}>
+            <p className={`text-3xl lg:text-4xl font-bold ${item.color} transition-colors duration-300`}>
               <Counter value={item.value} />
             </p>
           </div>
