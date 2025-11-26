@@ -52,7 +52,7 @@ export default function TargetUserBar() {
         <BarChart
           data={data}
           layout="vertical"
-          margin={{ top: 10, right: 30, left: 40, bottom: 5 }}
+          margin={{ top: 10, right: 30, left: 50, bottom: 5 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis type="number" />

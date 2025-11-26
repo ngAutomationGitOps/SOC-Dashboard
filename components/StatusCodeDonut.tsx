@@ -36,14 +36,14 @@ export default function StatusCodeDonut() {
   return (
     <div className="bg-white rounded-lg shadow-md p-4 border border-gray-200">
       <h2 className="text-lg font-semibold mb-2">Status Code Distribution</h2>
-      <ResponsiveContainer width="100%" height={250}>
+      <ResponsiveContainer width="100%" height={260}>
         <PieChart>
           <Pie
             data={data}
             dataKey="value"
             nameKey="name"
-            outerRadius={80}
-            innerRadius={40}
+            outerRadius={60}
+            innerRadius={30}
             label
           >
             {data.map((entry, index) => (

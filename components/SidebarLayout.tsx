@@ -6,7 +6,7 @@ import { ReactNode, useState } from 'react';
 import Image from 'next/image';
 
 const menuItems = [
-  { title: 'Dashboard', href: '/dashboard' },
+  { title: 'Dashboard', href: '/dashboard' }, 
   { title: 'Vulnerability', href: '/vulnerability' },
   { title: 'SO', href: '/so' },
   { title: 'Event', href: '/events' },
@@ -68,7 +68,7 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
         {/* Footer */}
         <div className="p-4 border-t border-gray-700">
           <p className="text-xs text-gray-400 text-center">
-            © 2025 Centralized Security
+          © 2025 Centralized Security
           </p>
         </div>
       </aside>
@@ -90,10 +90,8 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
 
         {/* Main Content Area */}
         <main className="flex-1 overflow-auto p-4 lg:p-6 bg-gray-50">
-          <div className="max-w-7xl mx-auto">
-            {children}
-          </div>
-        </main>
+        {children}
+      </main>
       </div>
     </div>
   );

@@ -2311,7 +2311,7 @@ export default function FimDetailsTableUI() {
         <>
           <div className="mobile-scroll">
             <table className="min-w-full text-xs lg:text-sm border border-gray-200 rounded-lg overflow-hidden">
-              <thead>
+            <thead>
                 <tr className="bg-gray-50 text-gray-700 border-b border-gray-200">
                   <th className="p-3 text-left font-semibold mobile-text-sm">Timestamp</th>
                   <th className="p-3 text-left font-semibold mobile-text-sm">Agent</th>
@@ -2322,8 +2322,8 @@ export default function FimDetailsTableUI() {
                   <th className="p-3 text-left font-semibold mobile-text-sm hidden lg:table-cell">Env</th>
                   <th className="p-3 text-left font-semibold mobile-text-sm">Description</th>
                   <th className="p-3 text-left font-semibold mobile-text-sm hidden xl:table-cell">Path</th>
-                </tr>
-              </thead>
+              </tr>
+            </thead>
             <tbody>
               {paginatedData.length > 0 ? (
                 paginatedData.map((row, idx) => (

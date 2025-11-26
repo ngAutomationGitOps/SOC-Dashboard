@@ -140,7 +140,7 @@ export default function SODashboard() {
           <div className="card card-hover">
             <DA_GeoPairsBarChart />
           </div>
-        </div>
+</div>
 
         {/* Tables Section - Full Width */}
         <div className="space-y-4">

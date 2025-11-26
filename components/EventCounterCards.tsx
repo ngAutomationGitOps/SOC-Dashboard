@@ -143,7 +143,7 @@ export default function EventCounterCards() {
           className="bg-white rounded-xl shadow p-4 text-center outline outline-1 flex flex-col items-center justify-center"
         >
           <div className="text-base text-gray-500 font-medium">{counter.title}</div>
-          <div className={`text-3xl font-bold mt-1 ${counter.color}`}>
+          <div className={`text-2xl font-bold mt-1 ${counter.color}`}>
             {counter.value.toLocaleString()}
           </div>
         </div>

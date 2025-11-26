@@ -256,11 +256,12 @@ export default function DashboardPage() {
           <PortsRow />
         </div>
 
-        {/* Three Column Grid - Responsive */}
-        <div className="grid-responsive-3 section-spacing">
-          <div className="card card-hover">
+        <div className="card card-hover">
             <VulnerabilityScoreTable />
-          </div>
+        </div>
+
+        {/* Three Column Grid - Responsive */}
+        <div className="grid-responsive-2">
           <div className="card card-hover">
             <VulnerabilitiesChart />
           </div>
@@ -270,7 +271,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Two Column Grid - Responsive */}
-        <div className="grid-responsive-2">
+        <div>
           <div className="card card-hover">
             <SSLStatusTable />
           </div>
