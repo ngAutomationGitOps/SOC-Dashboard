@@ -1,150 +1,178 @@
-// 'use client';
-
-// import React, { useEffect, useState } from 'react';
-
-// export default function EventCounterCards() {
-//   const [serverCount, setServerCount] = useState(0);
-//   const [eventCount, setEventCount] = useState(0);
-//   const [userCount, setUserCount] = useState(0);
-
-//   // Target counts from API
-//   const [targetServer, setTargetServer] = useState(0);
-//   const [targetEvent, setTargetEvent] = useState(0);
-//   const [targetUser, setTargetUser] = useState(0);
-
-//   useEffect(() => {
-//     Promise.all([
-//       fetch(`${process.env.NEXT_PUBLIC_API_BASE}/get-Agents`).then(res => res.json()),
-//       fetch(`${process.env.NEXT_PUBLIC_API_BASE}/event-count`).then(res => res.json()),
-//       fetch(`${process.env.NEXT_PUBLIC_API_BASE}/user-count`).then(res => res.json()),
-//     ])
-//       .then(([serverData, eventData, userData]) => {
-//         if (serverData?.count) setTargetServer(serverData.count);
-//         if (eventData?.count) setTargetEvent(eventData.count);
-//         if (userData?.count) setTargetUser(userData.count);
-//       })
-//       .catch(err => console.error('Error fetching counts:', err));
-//   }, []);
-
-//   // Animation function
-//   const animateCount = (start: number, end: number, setValue: (n: number) => void) => {
-//     let startTime: number | null = null;
-//     const duration = 1000; // 1 second animation
-
-//     const step = (timestamp: number) => {
-//       if (!startTime) startTime = timestamp;
-//       const progress = Math.min((timestamp - startTime) / duration, 1);
-//       setValue(Math.floor(progress * (end - start) + start));
-//       if (progress < 1) requestAnimationFrame(step);
-//     };
-
-//     requestAnimationFrame(step);
-//   };
-
-//   // Trigger animation when targets update
-//   useEffect(() => {
-//     animateCount(0, targetServer, setServerCount);
-//   }, [targetServer]);
-
-//   useEffect(() => {
-//     animateCount(0, targetEvent, setEventCount);
-//   }, [targetEvent]);
-
-//   useEffect(() => {
-//     animateCount(0, targetUser, setUserCount);
-//   }, [targetUser]);
-
-//   const counters = [
-//     { title: 'Count of Event', value: eventCount },
-//     { title: 'Count of Server', value: serverCount },
-//     { title: 'Count of User', value: userCount },
-//   ];
-
-//   return (
-//     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-//       {counters.map((counter) => (
-//         <div
-//           key={counter.title}
-//           className="bg-white shadow-md rounded-lg p-6 text-center border border-gray-200 outline outline-1"
-//         >
-//           <div className="text-3xl font-bold text-blue-600">{counter.value}</div>
-//           <div className="text-sm text-gray-500">{counter.title}</div>
-//         </div>
-//       ))}
-//     </div>
-//   );
-// }
-
-
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { Activity, Server, Users, AlertCircle } from 'lucide-react';
+
+interface CounterData {
+  title: string;
+  value: number;
+  color: string;
+  icon: React.ReactNode;
+  change?: number;
+  loading: boolean;
+  error?: string;
+}
 
 export default function EventCounterCards() {
-  const [serverCount, setServerCount] = useState(0);
-  const [eventCount, setEventCount] = useState(0);
-  const [userCount, setUserCount] = useState(0);
+  const [counters, setCounters] = useState<CounterData[]>([
+    {
+      title: 'Total Events',
+      value: 0,
+      color: 'text-blue-600',
+      icon: <Activity className="w-6 h-6" />,
+      loading: true
+    },
+    {
+      title: 'Active Servers',
+      value: 0,
+      color: 'text-green-600',
+      icon: <Server className="w-6 h-6" />,
+      loading: true
+    },
+    {
+      title: 'Active Users',
+      value: 0,
+      color: 'text-purple-600',
+      icon: <Users className="w-6 h-6" />,
+      loading: true
+    },
+  ]);
 
-  const [targetServer, setTargetServer] = useState(0);
-  const [targetEvent, setTargetEvent] = useState(0);
-  const [targetUser, setTargetUser] = useState(0);
+  const animateCount = (start: number, end: number, duration: number = 1500): Promise<number> => {
+    return new Promise((resolve) => {
+      let startTime: number | null = null;
 
-  useEffect(() => {
-    Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_API_BASE}/get-Agents`).then(res => res.json()),
-      fetch(`${process.env.NEXT_PUBLIC_API_BASE}/event-count`).then(res => res.json()),
-      fetch(`${process.env.NEXT_PUBLIC_API_BASE}/user-count`).then(res => res.json()),
-    ])
-      .then(([serverData, eventData, userData]) => {
-        if (serverData?.count) setTargetServer(serverData.count);
-        if (eventData?.count) setTargetEvent(eventData.count);
-        if (userData?.count) setTargetUser(userData.count);
-      })
-      .catch(err => console.error('Error fetching counts:', err));
-  }, []);
+      const step = (timestamp: number) => {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        const currentValue = Math.floor(progress * (end - start) + start);
 
-  const animateCount = (start: number, end: number, setValue: (n: number) => void) => {
-    let startTime: number | null = null;
-    const duration = 1000;
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          resolve(end);
+        }
 
-    const step = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      setValue(Math.floor(progress * (end - start) + start));
-      if (progress < 1) requestAnimationFrame(step);
-    };
+        return currentValue;
+      };
 
-    requestAnimationFrame(step);
+      requestAnimationFrame(step);
+    });
+  };
+
+  const fetchCounterData = async () => {
+    try {
+      const [serverRes, eventRes, userRes] = await Promise.all([
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE}/get-Agents`),
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE}/event-count`),
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE}/user-count`),
+      ]);
+
+      const [serverData, eventData, userData] = await Promise.all([
+        serverRes.json(),
+        eventRes.json(),
+        userRes.json(),
+      ]);
+
+      // Update counters with fetched data
+      setCounters(prevCounters => {
+        const newCounters = [...prevCounters];
+
+        // Events counter
+        if (eventData?.count !== undefined) {
+          newCounters[0] = {
+            ...newCounters[0],
+            loading: false,
+          };
+          animateCount(0, eventData.count).then(finalValue => {
+            setCounters(current => current.map((counter, idx) =>
+              idx === 0 ? { ...counter, value: finalValue, loading: false } : counter
+            ));
+          });
+        }
+
+        // Servers counter
+        if (serverData?.count !== undefined) {
+          newCounters[1] = {
+            ...newCounters[1],
+            loading: false,
+          };
+          animateCount(0, serverData.count).then(finalValue => {
+            setCounters(current => current.map((counter, idx) =>
+              idx === 1 ? { ...counter, value: finalValue, loading: false } : counter
+            ));
+          });
+        }
+
+        // Users counter
+        if (userData?.count !== undefined) {
+          newCounters[2] = {
+            ...newCounters[2],
+            loading: false,
+          };
+          animateCount(0, userData.count).then(finalValue => {
+            setCounters(current => current.map((counter, idx) =>
+              idx === 2 ? { ...counter, value: finalValue, loading: false } : counter
+            ));
+          });
+        }
+
+        return newCounters;
+      });
+    } catch (error) {
+      console.error('Error fetching counter data:', error);
+      setCounters(prevCounters =>
+        prevCounters.map(counter => ({
+          ...counter,
+          loading: false,
+          error: 'Failed to load data'
+        }))
+      );
+    }
   };
 
   useEffect(() => {
-    animateCount(0, targetServer, setServerCount);
-  }, [targetServer]);
+    fetchCounterData();
 
-  useEffect(() => {
-    animateCount(0, targetEvent, setEventCount);
-  }, [targetEvent]);
-
-  useEffect(() => {
-    animateCount(0, targetUser, setUserCount);
-  }, [targetUser]);
-
-  const counters = [
-    { title: 'Count of Event', value: eventCount, color: 'text-blue-600' },
-    { title: 'Count of Server', value: serverCount, color: 'text-blue-600' },
-    { title: 'Count of User', value: userCount, color: 'text-blue-600' },
-  ];
+    // Auto-refresh every 30 seconds for monitoring dashboard
+    const interval = setInterval(fetchCounterData, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
-      {counters.map((counter) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+      {counters.map((counter, index) => (
         <div
           key={counter.title}
-          className="bg-white rounded-xl shadow p-4 text-center outline outline-1 flex flex-col items-center justify-center"
+          className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
         >
-          <div className="text-base text-gray-500 font-medium">{counter.title}</div>
-          <div className={`text-2xl font-bold mt-1 ${counter.color}`}>
-            {counter.value.toLocaleString()}
+          <div className="flex items-center justify-between mb-4">
+            <div className={`p-3 rounded-lg bg-gray-50 ${counter.color.replace('text-', 'text-').replace('-600', '-100')}`}>
+              {counter.icon}
+            </div>
+            {counter.loading && (
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-gray-600">{counter.title}</p>
+            <div className="flex items-baseline space-x-2">
+              <span className={`text-3xl font-bold ${counter.color}`}>
+                {counter.loading ? '...' : counter.value.toLocaleString()}
+              </span>
+              {counter.change !== undefined && (
+                <span className={`text-sm ${counter.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {counter.change >= 0 ? '+' : ''}{counter.change}%
+                </span>
+              )}
+            </div>
+            {counter.error && (
+              <div className="flex items-center text-red-600 text-xs mt-1">
+                <AlertCircle className="w-3 h-3 mr-1" />
+                {counter.error}
+              </div>
+            )}
           </div>
         </div>
       ))}

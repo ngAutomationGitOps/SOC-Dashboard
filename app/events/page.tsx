@@ -20,25 +20,28 @@ export default function EventPage() {
           <h1 className="text-2xl font-bold text-gray-800">Event Dashboard</h1>
         </div>
 
-        {/* 🔳 Main Content Grid - Responsive layout (1.25:1.75 ratio) */}
-        <div className="grid grid-cols-1 xl:grid-cols-[1fr_2fr] gap-6">
+        {/* 🔳 Main Content Grid - Responsive layout with consistent heights */}
+        <div className="grid grid-cols-1 xl:grid-cols-[1fr_2fr] gap-4 sm:gap-6">
           {/* Left Section: Counter Cards + Event Map */}
-          <div className="space-y-11">
+          <div className="space-y-4 sm:space-y-6">
             <EventCounterCards />
-            <div className="min-h-[300px]">
+            <div className="h-80 sm:h-96 lg:h-[500px]">
               <EventMap />
             </div>
           </div>
 
-          {/* Right Section: Four Graphs (2x2 layout) */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div className="flex flex-col space-y-4">
+          {/* Right Section: Four Charts in responsive grid with equal heights */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+            <div className="h-80 sm:h-96 lg:h-[400px]">
               <StatusCodeDonut />
+            </div>
+            <div className="h-80 sm:h-96 lg:h-[400px]">
               <TargetUserBar />
             </div>
-
-            <div className="flex flex-col space-y-4">
+            <div className="h-80 sm:h-96 lg:h-[400px]">
               <EnvironmentDonut />
+            </div>
+            <div className="h-80 sm:h-96 lg:h-[400px]">
               <SourceIpBar />
             </div>
           </div>
