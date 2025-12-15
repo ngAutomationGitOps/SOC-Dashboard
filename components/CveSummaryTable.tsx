@@ -502,7 +502,7 @@ export default function CveSummaryTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [severityFilter, setSeverityFilter] = useState('All');
-  const itemsPerPage = 5;
+  const itemsPerPage = 11;
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_BASE}/cve-ids`)

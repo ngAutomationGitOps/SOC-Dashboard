@@ -209,14 +209,14 @@ const SeverityBreakdownByOS = () => {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
+    <div className="w-full h-full flex flex-col">
       <CustomLegend order={SEVERITY_ORDER} colors={SEVERITY_COLORS} visible={visible} toggle={toggle} />
 
-      <div className="h-96">
-        {/* <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 8, right: 10, left: 0, bottom: 70 }}>
+      <div className="flex-1 w-full min-h-[100px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={data} margin={{ top: 8, right: 10, left: 0, bottom: 90 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-            <XAxis dataKey="name" tick={<CustomizedAxisTick />} interval={0} height={70} />
+            <XAxis dataKey="name" tick={CustomizedAxisTick} interval={0} height={70} />
             <YAxis />
             <Tooltip content={<CustomTooltip />} />
 
@@ -225,22 +225,7 @@ const SeverityBreakdownByOS = () => {
             <Bar dataKey="Medium" stackId="a" fill={SEVERITY_COLORS.Medium} name="Medium" hide={!visible.Medium} />
             <Bar dataKey="Low" stackId="a" fill={SEVERITY_COLORS.Low} name="Low" hide={!visible.Low} />
           </BarChart>
-        </ResponsiveContainer> */}
-
-        <ResponsiveContainer width="100%" height="100%">
-  <BarChart data={data} margin={{ top: 8, right: 10, left: 0, bottom: 70 }}>
-    <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-    <XAxis dataKey="name" tick={CustomizedAxisTick} interval={0} height={70} />
-    <YAxis />
-    <Tooltip content={<CustomTooltip />} />
-
-    <Bar dataKey="Critical" stackId="a" fill={SEVERITY_COLORS.Critical} name="Critical" hide={!visible.Critical} />
-    <Bar dataKey="High" stackId="a" fill={SEVERITY_COLORS.High} name="High" hide={!visible.High} />
-    <Bar dataKey="Medium" stackId="a" fill={SEVERITY_COLORS.Medium} name="Medium" hide={!visible.Medium} />
-    <Bar dataKey="Low" stackId="a" fill={SEVERITY_COLORS.Low} name="Low" hide={!visible.Low} />
-  </BarChart>
-</ResponsiveContainer>
-
+        </ResponsiveContainer>
       </div>
     </div>
   );

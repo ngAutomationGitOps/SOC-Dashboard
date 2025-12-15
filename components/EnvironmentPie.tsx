@@ -20,11 +20,12 @@ const COLORS = [
   '#0099C6', '#109618', '#FF6600', '#00544d', '#6366f1', '#dc2626'
 ];
 
-// ✅ Responsive label rendering
-const renderCustomLabel = (props: any) => {
-  const { cx, cy, midAngle, outerRadius, percent, name } = props;
+// Custom label inside the pie slices
+const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: any) => {
+  if (percent < 0.08) return null; // Don't show labels for very small slices
+
   const RADIAN = Math.PI / 180;
-  const radius = outerRadius * 1.2;
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
@@ -32,12 +33,13 @@ const renderCustomLabel = (props: any) => {
     <text
       x={x}
       y={y}
-      fill="#111827"
-      textAnchor={x > cx ? 'start' : 'end'}
+      fill="#ffffff"
+      textAnchor="middle"
       dominantBaseline="central"
-      className="text-[10px] sm:text-xs md:text-sm lg:text-base"
+      className="font-semibold text-xs"
+      style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.7)' }}
     >
-      {`${name} (${(percent * 100).toFixed(0)}%)`}
+      {`${(percent * 100).toFixed(0)}%`}
     </text>
   );
 };
@@ -76,66 +78,61 @@ export default function EnvironmentPie() {
   }
 
   return (
-    
-    <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-4 sm:p-6 w-full">
-      {/* <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 mb-4 text-center">
-        Environment Distribution
-      </h3> */}
+    <div className="w-full h-full">
+      <ResponsiveContainer width="100%" height="100%" minHeight={320}>
+        <PieChart>
+          <Pie
+            data={data}
+            dataKey="value"
+            nameKey="name"
+            cx="50%"
+            cy="50%"
+            outerRadius="80%"
+            innerRadius="45%"
+            paddingAngle={4}
+            label={renderCustomLabel}
+            animationBegin={0}
+            animationDuration={800}
+          >
+            {data.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+                stroke="#ffffff"
+                strokeWidth={3}
+              />
+            ))}
+          </Pie>
 
-      {/* ✅ Fully responsive chart container */}
-      <div className="w-full h-[40vh] min-h-[280px]">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={data}
-              dataKey="value"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              outerRadius="80%"
-              innerRadius="40%"
-              labelLine={true}
-              label={renderCustomLabel}
-              paddingAngle={2}
-            >
-              {data.map((_, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                  stroke="#ffffff"
-                  strokeWidth={1.5}
-                />
-              ))}
-            </Pie>
+          <Tooltip
+            contentStyle={{
+              borderRadius: '8px',
+              fontSize: '13px',
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(0, 0, 0, 0.1)',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            }}
+            formatter={(value: number, name: string) => [
+              `${value}%`,
+              name,
+            ]}
+          />
 
-            <Tooltip
-              contentStyle={{
-                borderRadius: '10px',
-                fontSize: '14px',
-                backgroundColor: '#f9fafb',
-                border: '1px solid #e5e7eb',
-              }}
-              formatter={(value: number, name: string) => [
-                `${value}%`,
-                `${name}`,
-              ]}
-            />
-
-            {/* ✅ Legend moved to bottom and horizontal */}
-            <Legend
-              layout="horizontal"
-              verticalAlign="bottom"
-              align="center"
-              iconType="circle"
-              wrapperStyle={{
-                fontSize: '12px',
-                lineHeight: '20px',
-                marginTop: '8px',
-              }}
-            />
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
+          <Legend
+            layout="horizontal"
+            verticalAlign="bottom"
+            align="center"
+            iconType="circle"
+            wrapperStyle={{
+              fontSize: '11px',
+              lineHeight: '18px',
+              paddingTop: '12px',
+              marginBottom: '8px',
+            }}
+          />
+        </PieChart>
+      </ResponsiveContainer>
     </div>
   );
 }

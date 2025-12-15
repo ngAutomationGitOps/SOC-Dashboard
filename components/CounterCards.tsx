@@ -103,7 +103,7 @@ export default function CounterCards() {
             className="bg-white rounded-xl shadow p-6 text-center border hover:shadow-lg transition"
           >
             <h3 className="text-md text-gray-500 font-semibold mb-2">{card.title}</h3>
-            <p className="text-3xl font-bold" style={{ color: card.color }}>
+            <p className="text-2xl sm:text-3xl lg:text-4xl font-bold" style={{ color: card.color }}>
               <Counter value={card.value} />
             </p>
           </div>

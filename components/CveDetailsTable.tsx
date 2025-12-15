@@ -525,15 +525,19 @@ export default function CveDetailsTable() {
   const goToNext = () => setCurrentPage(page => Math.min(page + 1, totalPages));
 
   return (
-    <div style={styles.card}>
+    <div className="w-full h-full flex flex-col">
       {loading ? (
-        <p style={{ textAlign: 'center' }}>Loading...</p>
+        <div className="flex items-center justify-center h-32">
+          <div className="text-gray-500">Loading...</div>
+        </div>
       ) : cveList.length === 0 ? (
-        <p style={{ textAlign: 'center' }}>No data available</p>
+        <div className="flex items-center justify-center h-32">
+          <div className="text-gray-500">No data available</div>
+        </div>
       ) : (
         <>
-          {/* ✅ Filter Input */}
-          <div style={styles.filterBox}>
+          {/* Filter Input */}
+          <div className="mb-4">
             <input
               type="text"
               placeholder="Filter by CVE ID (e.g. CVE-2023-1234)"
@@ -542,13 +546,12 @@ export default function CveDetailsTable() {
                 setFilterText(e.target.value);
                 setCurrentPage(1);
               }}
-              style={styles.filterInput}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
-          <div style={{ overflowX: 'auto' }}>
-            {/* ✅ Table Header with Grey Background */}
-            <table style={styles.table}>
+          <div className="flex-1 overflow-auto">
+            <table style={{ ...styles.table, width: '100%' }}>
               <thead>
                 <tr>
                   <th style={{ ...styles.th, width: '180px', backgroundColor: '#f3f4f6' }}>
@@ -558,12 +561,7 @@ export default function CveDetailsTable() {
                   <th style={{ ...styles.th, backgroundColor: '#f3f4f6' }}>Remediation</th>
                 </tr>
               </thead>
-            </table>
-
-            {/* Scrollable Table Body */}
-            <div style={styles.tbodyContainer}>
-              <table style={{ ...styles.table, marginBottom: 0 }}>
-                <tbody>
+              <tbody>
                   {visibleList.length === 0 ? (
                     <tr>
                       <td colSpan={3} style={{ textAlign: 'center', padding: '12px' }}>
@@ -617,7 +615,6 @@ export default function CveDetailsTable() {
                   )}
                 </tbody>
               </table>
-            </div>
           </div>
 
           {/* Pagination Controls */}
@@ -698,12 +695,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: 'white',
     cursor: 'pointer',
     fontWeight: 'bold',
-  },
-  tbodyContainer: {
-    maxHeight: '400px',
-    overflowY: 'auto',
-    border: '1px solid #e5e7eb',
-    borderTop: 'none',
   },
   filterBox: {
     marginBottom: '12px',
