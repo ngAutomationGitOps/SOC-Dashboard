@@ -12,31 +12,51 @@ import SidebarLayout from '@/components/SidebarLayout';
 export default function SODashboard() {
   return (
     <SidebarLayout>
-      <main className="p-6 bg-gray-100 min-h-screen space-y-6">
-        {/* 🔳 Navbar */}
-        <div className="bg-white p-4 rounded-xl shadow border border-gray-200">
-          <h1 className="text-2xl font-bold text-gray-800">SO Dashboard</h1>
+      <div className="space-y-8 animate-fade-in px-4 py-6">
+        {/* Modern Header with Gradient */}
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-green-600 via-teal-600 to-cyan-700 p-8 text-white shadow-2xl">
+          <div className="absolute inset-0 bg-black/10"></div>
+          <div className="relative z-10">
+            <h1 className="text-3xl lg:text-4xl font-bold mb-3 tracking-tight">
+              Security Operations
+            </h1>
+            <p className="text-green-100 text-lg lg:text-xl opacity-90">
+              Advanced threat detection and incident response monitoring
+            </p>
+          </div>
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
         </div>
- <SO_SummaryCards />
-        {/* Row 1: Summary Cards + World Map + Severity Donut */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-          {/* <SO_SummaryCards /> */}
-          {/* <SO_WorldMap /> */}
-          <SO_SeverityDonut />
-          <SO_WorldMap />
-          {/* <SO_RuleTagsDonut /> */}
 
+        {/* Summary Cards */}
+        <SO_SummaryCards />
+
+        {/* Primary Charts Row - Balanced Layout */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
+          {/* Severity Donut - Takes 1 column */}
+          <div className="dashboard-card h-[400px] lg:h-[450px]">
+            <SO_SeverityDonut />
+          </div>
+
+          {/* World Map - Takes 1 column */}
+          <div className="dashboard-card h-[400px] lg:h-[450px]">
+            <SO_WorldMap />
+          </div>
         </div>
 
-         <div className="w-full">
+        {/* Data Tables Section - Full Width */}
+        <div className="space-y-6">
+          {/* Alert Rules Table */}
+          <div className="dashboard-card">
             <SO_AlertRulesTable />
           </div>
 
-        {/* Row 3: Connections Table (Full Width) */}
-        <div className="w-full">
-          <SO_ConnectionsTable />
+          {/* Connections Table */}
+          <div className="dashboard-card">
+            <SO_ConnectionsTable />
+          </div>
         </div>
-      </main>
+      </div>
     </SidebarLayout>
   );
 }
