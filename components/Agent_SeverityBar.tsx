@@ -79,51 +79,38 @@ const VerticalStackedBarChart = () => {
   }, []);
 
   return (
-    <div
-      style={{
-        backgroundColor: '#fff',
-        borderRadius: '12px',
-        boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-        border: '1px solid #e5e7eb',
-        padding: '20px',
-      }}
-    >
-      <h3
-        style={{
-          fontSize: '18px',
-          fontWeight: 600,
-          marginBottom: '16px',
-          textAlign: 'center',
-        }}
-      >
+    <div className="h-full flex flex-col p-4">
+      <h3 className="text-lg lg:text-xl font-semibold text-gray-800 mb-4 text-center">
         Agents Status by Department
       </h3>
 
-      <ResponsiveContainer width="100%" height={450}>
-        <BarChart
-          data={chartData}
-          margin={{ top: 20, right: 30, left: 20, bottom: 80 }}
-        >
-          <XAxis
-            dataKey="category"
-            tick={{ fontSize: 12 }}
-            angle={-30}
-            textAnchor="end"
-          />
-          <YAxis />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend verticalAlign="top" height={36} />
-          {statusKeys.map((key) => (
-            <Bar
-              key={key}
-              dataKey={key}
-              name={key.charAt(0).toUpperCase() + key.slice(1)}
-              stackId="a"
-              fill={COLORS[key] || '#9ca3af'} // default gray if no color defined
+      <div className="flex-1">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={chartData}
+            margin={{ top: 20, right: 30, left: 20, bottom: 80 }}
+          >
+            <XAxis
+              dataKey="category"
+              tick={{ fontSize: 12 }}
+              angle={-30}
+              textAnchor="end"
             />
-          ))}
-        </BarChart>
-      </ResponsiveContainer>
+            <YAxis />
+            <Tooltip content={<CustomTooltip />} />
+            <Legend verticalAlign="top" height={36} />
+            {statusKeys.map((key) => (
+              <Bar
+                key={key}
+                dataKey={key}
+                name={key.charAt(0).toUpperCase() + key.slice(1)}
+                stackId="a"
+                fill={COLORS[key] || '#9ca3af'} // default gray if no color defined
+              />
+            ))}
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };
