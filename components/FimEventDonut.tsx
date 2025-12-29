@@ -53,12 +53,12 @@ export default function FimEventDonut() {
   }, []);
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow border">
-      <h2 className="text-lg font-semibold text-gray-700 mb-4 text-center">
+    <div className="h-full flex flex-col p-4">
+      <h2 className="text-lg lg:text-xl font-semibold text-gray-800 mb-4 text-center">
         Event Type Breakdown
       </h2>
 
-      <div className="w-full h-[300px]">
+      <div className="flex-1">
         {isClient && chartData.length > 0 ? (
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -91,29 +91,33 @@ export default function FimEventDonut() {
             </PieChart>
           </ResponsiveContainer>
         ) : (
-          <div className="text-center text-gray-400 pt-24">Loading...</div>
+          <div className="flex items-center justify-center h-full">
+            <p className="text-center text-gray-500">Loading...</p>
+          </div>
         )}
       </div>
 
       {/* Custom Legend */}
-      <ul className="flex flex-wrap justify-center gap-6 mt-4 text-sm">
-        {chartData.map((entry, idx) => {
-          const color =
-            EVENT_COLORS[entry.name] || FALLBACK_COLORS[idx % FALLBACK_COLORS.length];
-          return (
-            <li key={idx} className="flex items-center gap-2">
-              <span
-                className="inline-block w-3 h-3 rounded-full"
-                style={{ backgroundColor: color }}
-              ></span>
-              <span className="text-gray-700 font-medium">{entry.name}</span>
-              <span className="ml-1 text-gray-500">
-                ({entry.value.toLocaleString()})
-              </span>
-            </li>
-          );
-        })}
-      </ul>
+      {isClient && chartData.length > 0 && (
+        <ul className="flex flex-wrap justify-center gap-4 mt-4 text-sm">
+          {chartData.map((entry, idx) => {
+            const color =
+              EVENT_COLORS[entry.name] || FALLBACK_COLORS[idx % FALLBACK_COLORS.length];
+            return (
+              <li key={idx} className="flex items-center gap-2">
+                <span
+                  className="inline-block w-3 h-3 rounded-full"
+                  style={{ backgroundColor: color }}
+                ></span>
+                <span className="text-gray-700 font-medium">{entry.name}</span>
+                <span className="ml-1 text-gray-500">
+                  ({entry.value.toLocaleString()})
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </div>
   );
 }

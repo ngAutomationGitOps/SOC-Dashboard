@@ -66,95 +66,79 @@ export default function FimEnvironmentDonut() {
     fetchData();
   }, []);
 
-  if (!isClient || data.length === 0) {
-    return (
-      <div className="bg-white p-4 rounded-xl shadow border text-center text-gray-400">
-        Loading...
-      </div>
-    );
-  }
-
   return (
-    <div className="bg-white p-4 rounded-xl shadow border">
-      <h2 className="text-lg font-semibold text-gray-700 mb-4 text-center">
+    <div className="h-full flex flex-col p-4">
+      <h2 className="text-lg lg:text-xl font-semibold text-gray-800 mb-4 text-center">
         Environment Breakdown
       </h2>
 
-      <ResponsiveContainer width="100%" height={320}>
-        <PieChart>
-          <Pie
-            data={data}
-            dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            innerRadius={60}
-            outerRadius={100}
-            paddingAngle={2}
-            labelLine={true}
-            // label={({ name, percent, x, y, cx }) => {
-            //   const textAnchor = x > cx ? 'start' : 'end';
-            //   return (
-            //     <text
-            //       x={x}
-            //       y={y}
-            //       textAnchor={textAnchor}
-            //       dominantBaseline="central"
-            //       fill="#374151"
-            //       fontSize={12}
-            //     >
-            //       {`${name} (${(percent * 100).toFixed(0)}%)`}
-            //     </text>
-            //   );
-            // }}
-            label={({ name, percent = 0, x, y, cx }) => {
-  const textAnchor = x > cx ? 'start' : 'end';
-  return (
-    <text
-      x={x}
-      y={y}
-      textAnchor={textAnchor}
-      dominantBaseline="central"
-      fill="#374151"
-      fontSize={12}
-    >
-      {`${name} (${(percent * 100).toFixed(0)}%)`}
-    </text>
-  );
-}}
-
-          >
-            {data.map((_, idx) => {
-              // Top 3 → Red family colors
-              if (idx < 3) {
-                return (
-                  <Cell
-                    key={`cell-${idx}`}
-                    fill={HIGHLIGHT_COLORS[idx]}
-                    stroke="#fff"
-                    strokeWidth={1}
-                  />
-                );
-              }
-              // Others → fallback COLORS
-              return (
-                <Cell
-                  key={`cell-${idx}`}
-                  fill={COLORS[idx % COLORS.length]}
-                  stroke="#fff"
-                  strokeWidth={1}
-                />
-              );
-            })}
-          </Pie>
-          <Tooltip />
-          <Legend
-            verticalAlign="bottom"
-            iconType="circle"
-            wrapperStyle={{ fontSize: 12 }}
-          />
-        </PieChart>
-      </ResponsiveContainer>
+      <div className="flex-1">
+        {(!isClient || data.length === 0) ? (
+          <div className="flex items-center justify-center h-full">
+            <p className="text-center text-gray-500">Loading...</p>
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={data}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={100}
+                paddingAngle={2}
+                labelLine={true}
+                label={({ name, percent = 0, x, y, cx }) => {
+                  const textAnchor = x > cx ? 'start' : 'end';
+                  return (
+                    <text
+                      x={x}
+                      y={y}
+                      textAnchor={textAnchor}
+                      dominantBaseline="central"
+                      fill="#374151"
+                      fontSize={12}
+                    >
+                      {`${name} (${(percent * 100).toFixed(0)}%)`}
+                    </text>
+                  );
+                }}
+              >
+                {data.map((_, idx) => {
+                  // Top 3 → Red family colors
+                  if (idx < 3) {
+                    return (
+                      <Cell
+                        key={`cell-${idx}`}
+                        fill={HIGHLIGHT_COLORS[idx]}
+                        stroke="#fff"
+                        strokeWidth={1}
+                      />
+                    );
+                  }
+                  // Others → fallback COLORS
+                  return (
+                    <Cell
+                      key={`cell-${idx}`}
+                      fill={COLORS[idx % COLORS.length]}
+                      stroke="#fff"
+                      strokeWidth={1}
+                    />
+                  );
+                })}
+              </Pie>
+              <Tooltip />
+              <Legend
+                verticalAlign="bottom"
+                iconType="circle"
+                wrapperStyle={{ fontSize: 12 }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        )}
+      </div>
     </div>
   );
 }

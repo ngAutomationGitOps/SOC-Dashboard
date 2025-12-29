@@ -37,7 +37,7 @@ function Counter({ value }: { value: number | null }) {
   return <>{Math.round(count).toLocaleString()}</>;
 }
 
-export default function FimCounterCard({ small = false }) {
+export default function FimCounterCard() {
   const [count, setCount] = useState<number | null>(null);
   const [isClient, setIsClient] = useState(false);
 
@@ -58,17 +58,9 @@ export default function FimCounterCard({ small = false }) {
   }, []);
 
   return (
-    <div
-      className={`p-4 rounded-xl shadow border text-center ${
-        small ? 'h-[120px]' : 'h-[200px]'
-      }`}
-    >
-      <h2 className="text-lg font-semibold text-gray-500">Total Count</h2>
-      <p
-        className={`font-bold ${
-          small ? 'text-3xl' : 'text-5xl'
-        } text-green-600 mt-2`}
-      >
+    <div className="h-full flex flex-col items-center justify-center text-center p-6">
+      <h2 className="text-lg lg:text-xl font-semibold text-gray-600 mb-4">Total Count</h2>
+      <p className="text-4xl lg:text-5xl font-bold text-green-600">
         {isClient ? <Counter value={count} /> : '—'}
       </p>
     </div>
