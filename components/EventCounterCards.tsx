@@ -140,25 +140,25 @@ export default function EventCounterCards() {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
       {counters.map((counter, index) => (
         <div
           key={counter.title}
-          className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+          className="card card-hover p-6 text-center flex flex-col items-center justify-center"
         >
-          <div className="flex items-center justify-between mb-4">
-            <div className={`p-3 rounded-lg bg-gray-50 ${counter.color.replace('text-', 'text-').replace('-600', '-100')}`}>
+          <div className="flex items-center justify-center mb-4">
+            <div className={`p-3 rounded-lg bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm border border-white/20 ${counter.color.replace('text-', 'text-')} shadow-sm`}>
               {counter.icon}
             </div>
             {counter.loading && (
-              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse ml-2"></div>
             )}
           </div>
 
           <div className="space-y-2">
-            <p className="text-sm font-medium text-gray-600">{counter.title}</p>
-            <div className="flex items-baseline space-x-2">
-              <span className={`text-3xl font-bold ${counter.color}`}>
+            <p className="text-sm lg:text-base text-gray-600 font-medium">{counter.title}</p>
+            <div className="flex flex-col items-center space-y-1">
+              <span className={`text-2xl lg:text-3xl font-bold ${counter.color}`}>
                 {counter.loading ? '...' : counter.value.toLocaleString()}
               </span>
               {counter.change !== undefined && (
@@ -168,7 +168,7 @@ export default function EventCounterCards() {
               )}
             </div>
             {counter.error && (
-              <div className="flex items-center text-red-600 text-xs mt-1">
+              <div className="flex items-center text-red-600 text-xs mt-2">
                 <AlertCircle className="w-3 h-3 mr-1" />
                 {counter.error}
               </div>

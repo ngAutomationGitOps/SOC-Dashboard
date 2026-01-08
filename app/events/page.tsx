@@ -13,46 +13,66 @@ import EventMap from '@/components/EventMap';
 export default function EventPage() {
   return (
     <SidebarLayout>
-      <div className="w-full px-4 py-6 space-y-6 bg-gray-100 min-h-screen overflow-x-hidden">
+      <div className="space-y-8 animate-fade-in px-4 py-6">
 
-        {/* ✅ Navbar */}
-        <div className="bg-white p-6 rounded-xl shadow border border-gray-200">
-          <h1 className="text-2xl font-bold text-gray-800">Event Dashboard</h1>
+        {/* Modern Header with Gradient */}
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-700 p-8 text-white shadow-2xl">
+          <div className="absolute inset-0 bg-black/10"></div>
+          <div className="relative z-10">
+            <h1 className="text-3xl lg:text-4xl font-bold mb-3 tracking-tight">
+              Event Monitoring Dashboard
+            </h1>
+            <p className="text-blue-100 text-lg lg:text-xl opacity-90">
+              Real-time event tracking and security incident monitoring
+            </p>
+          </div>
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
         </div>
 
-        {/* 🔳 Main Content Grid - Responsive layout with consistent heights */}
-        <div className="grid grid-cols-1 xl:grid-cols-[1fr_2fr] gap-4 sm:gap-6">
-          {/* Left Section: Counter Cards + Event Map */}
-          <div className="space-y-4 sm:space-y-6">
-            <EventCounterCards />
-            <div className="h-80 sm:h-96 lg:h-[500px]">
-              <EventMap />
-            </div>
+        {/* Counter Cards */}
+        <EventCounterCards />
+
+        {/* Primary Charts Row - Balanced Layout */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
+          {/* Event Map - Takes 1 column */}
+          <div className="dashboard-card h-[400px] lg:h-[450px]">
+            <EventMap />
           </div>
 
-          {/* Right Section: Four Charts in responsive grid with equal heights */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-            <div className="h-80 sm:h-96 lg:h-[400px]">
-              <StatusCodeDonut />
-            </div>
-            <div className="h-80 sm:h-96 lg:h-[400px]">
-              <TargetUserBar />
-            </div>
-            <div className="h-80 sm:h-96 lg:h-[400px]">
-              <EnvironmentDonut />
-            </div>
-            <div className="h-80 sm:h-96 lg:h-[400px]">
-              <SourceIpBar />
-            </div>
+          {/* Status Code Donut - Takes 1 column */}
+          <div className="dashboard-card h-[400px] lg:h-[450px]">
+            <StatusCodeDonut />
           </div>
         </div>
 
-        {/* 📋 Tables */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 mt-6">
-          <div className="overflow-x-auto">
+        {/* Secondary Charts Grid - Perfect Balance */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Target User Bar */}
+          <div className="dashboard-card h-[320px] lg:h-[360px]">
+            <TargetUserBar />
+          </div>
+
+          {/* Environment Donut */}
+          <div className="dashboard-card h-[320px] lg:h-[360px]">
+            <EnvironmentDonut />
+          </div>
+
+          {/* Source IP Bar */}
+          <div className="dashboard-card h-[320px] lg:h-[360px]">
+            <SourceIpBar />
+          </div>
+        </div>
+
+        {/* Data Tables Section - Full Width */}
+        <div className="space-y-6">
+          {/* Impacted Servers Table */}
+          <div className="dashboard-card">
             <ImpactedServersTable />
           </div>
-          <div className="overflow-x-auto">
+
+          {/* Recent Logs Table */}
+          <div className="dashboard-card">
             <RecentLogsTable />
           </div>
         </div>
