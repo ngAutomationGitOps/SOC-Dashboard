@@ -175,8 +175,12 @@ export default function PortsSummaryTable() {
   );
 
   return (
-    <div style={styles.container}>
-      <table style={styles.table}>
+    <div className="h-full flex flex-col p-4">
+      <h3 className="text-lg lg:text-xl font-semibold text-gray-800 mb-4 text-center">
+        Ports Summary
+      </h3>
+      <div className="flex-1 overflow-auto">
+        <table style={styles.table}>
         <thead>
           <tr>
             <th style={styles.th}>DOMAIN</th>
@@ -197,7 +201,8 @@ export default function PortsSummaryTable() {
             </tr>
           ))}
         </tbody>
-      </table>
+        </table>
+      </div>
     </div>
   );
 }
