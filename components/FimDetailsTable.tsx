@@ -2148,7 +2148,7 @@ export default function FimDetailsTableUI() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch("http://128.2.99.235/fim-events");
+        const res = await fetch("http://10.0.20.235/fim-events");
         const json = await res.json();
         let events = json.data || [];
 

@@ -48,9 +48,9 @@ const VerticalStackedBarChart = () => {
   const [statusKeys, setStatusKeys] = useState<string[]>([]);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchData() { 
       try {
-        const res = await fetch('http://128.2.99.235/agents-status-by-dept');
+        const res = await  fetch(`${process.env.NEXT_PUBLIC_API_BASE}/agents-status-by-dept`);
         const json = await res.json();
 
         const data = json.data;

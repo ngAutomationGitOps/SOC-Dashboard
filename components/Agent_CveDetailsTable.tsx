@@ -908,7 +908,7 @@ export default function ServerTable() {
   useEffect(() => {
     const fetchServers = async () => {
       try {
-        const res = await fetch('http://128.2.99.235/agents-info');
+        const res = await  fetch(`${process.env.NEXT_PUBLIC_API_BASE}/agents-info`);
         const json = await res.json();
 
         const normalized: ServerItem[] = json.data.map((item: any) => ({

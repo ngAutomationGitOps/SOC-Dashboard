@@ -88,24 +88,188 @@
 // }
 
 
+// 'use client';
+
+// import DA_Multi_metric from '@/components/DA_Multi-metric';
+// import SO_WorldMap from '@/components/SO_WorldMap';
+// import StatusCodeDonut from '@/components/StatusCodeDonut';
+// import DA_GeoPairsBarChart from '@/components/DA_GeoPairsBarChart';
+// import SO_AlertRulesTable from '@/components/SO_AlertRulesTable';
+// import SO_SeverityBar from '@/components/SO_SeverityBar';
+// import SO_ConnectionsTable from '@/components/SO_ConnectionsTable';
+// import SidebarLayout from '@/components/SidebarLayout';
+
+// export default function SODashboard() {
+//   return (
+//     <SidebarLayout>
+//       <div className="space-y-8 animate-fade-in px-4 py-6">
+//         {/* Modern Header with Gradient */}
+//         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 p-8 text-white shadow-2xl">
+//           <div className="absolute inset-0 bg-black/10"></div>
+//           <div className="relative z-10">
+//             <h1 className="text-3xl lg:text-4xl font-bold mb-3 tracking-tight">
+//               Security Operations Center
+//             </h1>
+//             <p className="text-blue-100 text-lg lg:text-xl opacity-90">
+//               Real-time monitoring and threat intelligence dashboard
+//             </p>
+//           </div>
+//           <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+//           <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+//         </div>
+
+//         {/* Primary Metrics Row - Balanced Layout */}
+//         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
+//           {/* Multi-Metric Chart - Takes 2 columns on XL */}
+//           {/* <div className="xl:col-span-2">
+//             <div className="dashboard-card h-[400px] lg:h-[450px]">
+//               <DA_Multi_metric />
+//             </div>
+//           </div> */}
+
+//  <div className="xl:col-span-1">
+//             <div className="dashboard-card h-[400px] lg:h-[450px]">
+//               <SO_WorldMap />
+//             </div>
+//           </div>
+
+//           {/* World Map - Takes 1 column on XL */}
+//           <div className="xl:col-span-1">
+//             <div className="dashboard-card h-[400px] lg:h-[450px]">
+//               <SO_WorldMap />
+//             </div>
+//           </div>
+//         </div>
+
+//         {/* Secondary Metrics Grid - Perfect Balance */}
+//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+//           {/* Three Status Donuts - Each takes 1 column */}
+//           <div className="dashboard-card h-[320px] lg:h-[360px]">
+//             <StatusCodeDonut />
+//           </div>
+//           <div className="dashboard-card h-[320px] lg:h-[360px]">
+//             <StatusCodeDonut />
+//           </div>
+//           <div className="dashboard-card h-[320px] lg:h-[360px]">
+//             <StatusCodeDonut />
+//           </div>
+
+//           {/* Geo Pairs Bar Chart - Takes 2 columns on XL */}
+//           <div className="md:col-span-2 lg:col-span-2 xl:col-span-2">
+//             <div className="dashboard-card h-[320px] lg:h-[360px]">
+//               <DA_GeoPairsBarChart />
+//             </div>
+//           </div>
+//         </div>
+
+//         {/* Data Tables Section - Full Width */}
+//         <div className="space-y-6">
+//           {/* Future: Add data tables here if needed */}
+//         </div>
+//       </div>
+//     </SidebarLayout>
+//   );
+// }
+
+
+// 'use client';
+
+// import DA_Multi_metric from '@/components/DA_Multi-metric';
+// import SO_WorldMap from '@/components/SO_WorldMap';
+// import StatusCodeDonut from '@/components/StatusCodeDonut';
+// import DA_GeoPairsBarChart from '@/components/DA_GeoPairsBarChart';
+// import SidebarLayout from '@/components/SidebarLayout';
+// import DA_VulnerabilityHeatmap from '@/components/DA_VulnerabilityHeatmap';
+
+
+// export default function SODashboard() {
+//   return (
+//     <SidebarLayout>
+//       <div className="space-y-8 animate-fade-in px-4 py-6">
+
+//         {/* ================= HEADER ================= */}
+//         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 p-8 text-white shadow-2xl">
+//           <div className="absolute inset-0 bg-black/10"></div>
+
+//           <div className="relative z-10">
+//             <h1 className="text-3xl lg:text-4xl font-bold mb-3 tracking-tight">
+//               Security Operations Center
+//             </h1>
+//             <p className="text-blue-100 text-lg lg:text-xl opacity-90">
+//               Real-time monitoring and threat intelligence dashboard
+//             </p>
+//           </div>
+//         </div>
+
+//         {/* ================= WORLD MAPS (50 / 50) ================= */}
+//         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
+
+//           <div className="dashboard-card h-[400px] lg:h-[450px]">
+//             <SO_WorldMap />
+//           </div>
+
+//           <div className="dashboard-card h-[400px] lg:h-[450px]">
+//             <DA_VulnerabilityHeatmap />
+//           </div>
+
+//         </div>
+
+//         {/* ================= SECONDARY METRICS ================= */}
+//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+
+//           <div className="dashboard-card h-[320px] lg:h-[360px]">
+//             <StatusCodeDonut />
+//           </div>
+
+//           <div className="dashboard-card h-[320px] lg:h-[360px]">
+//             <StatusCodeDonut />
+//           </div>
+
+//           <div className="dashboard-card h-[320px] lg:h-[360px]">
+//             <StatusCodeDonut />
+//           </div>
+
+//           {/* <div className="md:col-span-2 lg:col-span-2 xl:col-span-2">
+//             <div className="dashboard-card h-[320px] lg:h-[360px]">
+//               <DA_GeoPairsBarChart />
+//             </div>
+//           </div> */}
+
+//         </div>
+
+//       </div>
+//     </SidebarLayout>
+//   );
+// }
+
+
 'use client';
 
 import DA_Multi_metric from '@/components/DA_Multi-metric';
 import SO_WorldMap from '@/components/SO_WorldMap';
 import StatusCodeDonut from '@/components/StatusCodeDonut';
 import DA_GeoPairsBarChart from '@/components/DA_GeoPairsBarChart';
-import SO_AlertRulesTable from '@/components/SO_AlertRulesTable';
-import SO_SeverityBar from '@/components/SO_SeverityBar';
-import SO_ConnectionsTable from '@/components/SO_ConnectionsTable';
 import SidebarLayout from '@/components/SidebarLayout';
+import DA_VulnerabilityHeatmap from '@/components/DA_VulnerabilityHeatmap';
+import DA_AlertRulesTable from '@/components/DA_AlertRulesTable';
+import DA_RecentLogsTable from '@/components/DA_RecentLogsTable';
+import Test from '@/components/DA_Disconnectedagent';
+import DA_VulnerabilityScoreTable from '@/components/DA_VulnerabilityScoreTable';
+
+
+
+
+
 
 export default function SODashboard() {
   return (
     <SidebarLayout>
       <div className="space-y-8 animate-fade-in px-4 py-6">
-        {/* Modern Header with Gradient */}
+
+        {/* ================= HEADER ================= */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 p-8 text-white shadow-2xl">
           <div className="absolute inset-0 bg-black/10"></div>
+
           <div className="relative z-10">
             <h1 className="text-3xl lg:text-4xl font-bold mb-3 tracking-tight">
               Security Operations Center
@@ -114,53 +278,55 @@ export default function SODashboard() {
               Real-time monitoring and threat intelligence dashboard
             </p>
           </div>
-          <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
         </div>
 
-        {/* Primary Metrics Row - Balanced Layout */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
-          {/* Multi-Metric Chart - Takes 2 columns on XL */}
-          <div className="xl:col-span-2">
-            <div className="dashboard-card h-[400px] lg:h-[450px]">
-              <DA_Multi_metric />
-            </div>
+        {/* ================= PRIMARY ROW (50 / 50) ================= */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
+
+          <div className="dashboard-card h-[400px] lg:h-[450px]">
+            <SO_WorldMap />
           </div>
 
-          {/* World Map - Takes 1 column on XL */}
-          <div className="xl:col-span-1">
-            <div className="dashboard-card h-[400px] lg:h-[450px]">
-              <SO_WorldMap />
-            </div>
+          <div className="dashboard-card h-[400px] lg:h-[450px]">
+            <DA_VulnerabilityHeatmap />
           </div>
+
         </div>
 
-        {/* Secondary Metrics Grid - Perfect Balance */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-          {/* Three Status Donuts - Each takes 1 column */}
+        {/* ================= DONUT METRICS (33 / 33 / 33) ================= */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+          <div className="dashboard-card h-[320px] lg:h-[360px]">
+            <DA_AlertRulesTable />
+          </div>
+
+          <div className="dashboard-card h-[320px] lg:h-[360px]">
+            <DA_RecentLogsTable />
+          </div>
+
+          <div className="dashboard-card h-[320px] lg:h-[360px]">
+            <DA_VulnerabilityScoreTable />
+          </div>
+
+        </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
           <div className="dashboard-card h-[320px] lg:h-[360px]">
             <StatusCodeDonut />
           </div>
+
           <div className="dashboard-card h-[320px] lg:h-[360px]">
-            <StatusCodeDonut />
-          </div>
-          <div className="dashboard-card h-[320px] lg:h-[360px]">
-            <StatusCodeDonut />
+            <Test />
           </div>
 
-          {/* Geo Pairs Bar Chart - Takes 2 columns on XL */}
-          <div className="md:col-span-2 lg:col-span-2 xl:col-span-2">
-            <div className="dashboard-card h-[320px] lg:h-[360px]">
-              <DA_GeoPairsBarChart />
-            </div>
-          </div>
-        </div>
+          <div className="dashboard-card h-[320px] lg:h-[360px]">
+            <StatusCodeDonut />
+          </div>          
 
-        {/* Data Tables Section - Full Width */}
-        <div className="space-y-6">
-          {/* Future: Add data tables here if needed */}
         </div>
       </div>
+      
     </SidebarLayout>
   );
 }

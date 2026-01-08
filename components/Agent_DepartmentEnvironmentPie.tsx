@@ -49,7 +49,8 @@ export default function EnvironmentPie() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch('http://128.2.99.235/agents-by-dept');
+        const res = await   fetch(`${process.env.NEXT_PUBLIC_API_BASE}/agents-by-dept`)
+        //  fetch(`${process.env.NEXT_PUBLIC_API_BASE}/agents-count/wazuh`),
         const json = await res.json();
 
         // Transform into chart format, excluding "Total"

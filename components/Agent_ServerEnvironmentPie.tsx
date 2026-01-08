@@ -48,8 +48,8 @@ export default function EnvironmentPie() {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const res = await fetch('http://128.2.99.235/agents-by-env');
+      try {0
+        const res = await   fetch(`${process.env.NEXT_PUBLIC_API_BASE}/agents-by-env`);
         const json = await res.json();
 
         if (json?.data) {
