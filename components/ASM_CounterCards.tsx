@@ -122,16 +122,16 @@ export default function CounterCards() {
 
   return (
     <div className="w-full">
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         {counters.map((item, idx) => (
           <div
             key={idx}
-            className="card card-hover text-center p-6 bg-white border-gray-200"
+            className="card card-hover p-6 text-center flex flex-col items-center justify-center"
           >
-            <h3 className="text-sm text-gray-600 font-medium mb-3 mobile-text-sm">
+            <h3 className="text-sm lg:text-base text-gray-600 font-medium mb-4">
               {item.label}
             </h3>
-            <p className={`text-3xl lg:text-4xl font-bold ${item.color} transition-colors duration-300`}>
+            <p className={`text-2xl lg:text-3xl font-bold ${item.color}`}>
               <Counter value={item.value} />
             </p>
           </div>

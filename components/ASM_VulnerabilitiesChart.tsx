@@ -105,12 +105,12 @@ const COLORS: Record<string, string> = {
 
 export default function VulnerabilitiesChart() {
   return (
-    <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-6">
-      <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">
+    <div className="h-full flex flex-col p-4">
+      <h3 className="text-lg lg:text-xl font-semibold text-gray-800 mb-4 text-center">
         Vulnerabilities by Severity
       </h3>
 
-      <div className="w-full max-w-4xl mx-auto" style={{ height: "400px" }}>
+      <div className="flex-1">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />

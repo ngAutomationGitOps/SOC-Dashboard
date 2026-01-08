@@ -239,43 +239,51 @@ export default function DashboardPage() {
 
   return (
     <SidebarLayout>
-      <div className="space-y-6 animate-fade-in">
-        {/* Header */}
-        <div className="card card-hover">
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
-            Attack Surface Management
-          </h1>
-          <p className="text-gray-600 text-sm lg:text-base">
-            Monitor and manage your attack surface vulnerabilities
-          </p>
+      <div className="space-y-8 animate-fade-in px-4 py-6">
+        {/* Modern Header with Gradient */}
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-700 p-8 text-white shadow-2xl">
+          <div className="absolute inset-0 bg-black/10"></div>
+          <div className="relative z-10">
+            <h1 className="text-3xl lg:text-4xl font-bold mb-3 tracking-tight">
+              Attack Surface Management
+            </h1>
+            <p className="text-violet-100 text-lg lg:text-xl opacity-90">
+              Comprehensive attack surface monitoring and vulnerability assessment
+            </p>
+          </div>
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
         </div>
 
-        {/* Counter Cards and Ports Row */}
-        <div className="space-y-6">
-          <CounterCards />
+        {/* Counter Cards */}
+        <CounterCards />
+
+        {/* Ports Row */}
+        <div className="dashboard-card">
           <PortsRow />
         </div>
 
-        <div className="card card-hover">
-            <VulnerabilityScoreTable />
+        {/* Vulnerability Score Table */}
+        <div className="dashboard-card h-[500px]">
+          <VulnerabilityScoreTable />
         </div>
 
-        {/* Three Column Grid - Responsive */}
-        <div className="grid-responsive-2">
-          <div className="card card-hover">
+        {/* Charts Row - Balanced Layout */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
+          <div className="dashboard-card h-[400px] lg:h-[450px]">
             <VulnerabilitiesChart />
           </div>
-          <div className="card card-hover">
+          <div className="dashboard-card h-[400px] lg:h-[450px]">
             <AgentServerEnvironmentPie />
           </div>
         </div>
 
-        {/* Two Column Grid - Responsive */}
-        <div>
-          <div className="card card-hover">
+        {/* Data Tables Section - Full Width */}
+        <div className="space-y-6">
+          <div className="dashboard-card">
             <SSLStatusTable />
           </div>
-          <div className="card card-hover">
+          <div className="dashboard-card">
             <PortsSummary />
           </div>
         </div>
