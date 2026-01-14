@@ -164,19 +164,15 @@ export default function DA_Disconnectedagent() {
   }
 
   return (
-    <div className="w-full h-full flex flex-col">
-      <h2 className="text-lg font-semibold mb-3 text-gray-700">
-        Disconnected Wazuh Agents
-      </h2>
-
-      <div className="border rounded-xl overflow-x-auto">
-        <table className="w-full border-collapse text-sm">
-          <thead>
-            <tr className="bg-gray-700 text-white">
-              <th className="text-left px-4 py-3">Environment</th>
-              <th className="text-left px-4 py-3">Agent Name</th>
-              <th className="text-center px-4 py-3 w-28">IP Address</th>
-              <th className="text-center px-4 py-3 w-28">Status</th>
+    <div className="h-full flex flex-col">
+      <div className="flex-1 overflow-auto">
+        <table className="min-w-full table-auto text-sm">
+          <thead className="bg-gray-50 sticky top-0">
+            <tr>
+              <th className="px-4 py-3 text-left font-semibold text-gray-700">Environment</th>
+              <th className="px-4 py-3 text-left font-semibold text-gray-700">Agent Name</th>
+              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-28">IP Address</th>
+              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-28">Status</th>
             </tr>
           </thead>
 

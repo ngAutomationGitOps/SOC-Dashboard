@@ -184,21 +184,14 @@ export default function SO_AlertRulesTable() {
   }, []);
 
   return (
-    <div className="w-full h-full flex flex-col">
-      {/* ===== Title ===== */}
-      <h2 className="text-lg font-semibold mb-3 text-gray-700">
-        Recent High/Critical Alerts{' '}
-        <span className="text-sm text-blue-600 font-medium">(SO Alert)</span>
-      </h2>
-
-      {/* ===== Table ===== */}
-      <div className="border rounded-xl overflow-hidden">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-700 text-white text-sm">
-              <th className="text-left px-4 py-3">Timestamp</th>
-              <th className="text-left px-4 py-3">Message</th>
-              <th className="text-center px-4 py-3 w-28">Severity</th>
+    <div className="h-full flex flex-col">
+      <div className="flex-1 overflow-auto">
+        <table className="min-w-full table-auto text-sm">
+          <thead className="bg-gray-50 sticky top-0">
+            <tr>
+              <th className="px-4 py-3 text-left font-semibold text-gray-700">Timestamp</th>
+              <th className="px-4 py-3 text-left font-semibold text-gray-700">Message</th>
+              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-28">Severity</th>
             </tr>
           </thead>
 

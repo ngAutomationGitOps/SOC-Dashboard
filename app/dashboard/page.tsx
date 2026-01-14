@@ -247,13 +247,13 @@
 
 import DA_Multi_metric from '@/components/DA_Multi-metric';
 import SO_WorldMap from '@/components/SO_WorldMap';
-import StatusCodeDonut from '@/components/StatusCodeDonut';
-import DA_GeoPairsBarChart from '@/components/DA_GeoPairsBarChart';
+import StatusCodeTable from '@/components/StatusCodeTable';
+import StatusCodeTable2 from '@/components/StatusCodeTable2';
 import SidebarLayout from '@/components/SidebarLayout';
 import DA_VulnerabilityHeatmap from '@/components/DA_VulnerabilityHeatmap';
 import DA_AlertRulesTable from '@/components/DA_AlertRulesTable';
 import DA_RecentLogsTable from '@/components/DA_RecentLogsTable';
-import Test from '@/components/DA_Disconnectedagent';
+import DA_Disconnectedagent from '@/components/DA_Disconnectedagent';
 import DA_VulnerabilityScoreTable from '@/components/DA_VulnerabilityScoreTable';
 
 
@@ -293,37 +293,63 @@ export default function SODashboard() {
 
         </div>
 
-        {/* ================= DONUT METRICS (33 / 33 / 33) ================= */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-          <div className="dashboard-card h-[320px] lg:h-[360px]">
-            <DA_AlertRulesTable />
+        {/* ================= TABLES SECTION ================= */}
+        <div className="grid gap-6" style={{ gridTemplateColumns: '1fr 1fr' }}>
+          {/* Left Column - Alert Rules + Recent Logs */}
+          <div className="flex flex-col gap-8">
+            <div className="dashboard-card min-h-[350px]">
+              <h2 className="text-lg lg:text-xl font-semibold text-gray-800 mb-4 text-center pt-4">
+                Top Alert Rules
+              </h2>
+              <div className="px-4 pb-4 h-64 overflow-y-auto">
+                <DA_AlertRulesTable />
+              </div>
+            </div>
+            <div className="dashboard-card min-h-[350px] -mt-2">
+              <h2 className="text-lg lg:text-xl font-semibold text-gray-800 mb-4 text-center pt-4">
+                Recent Logs Summary
+              </h2>
+              <div className="px-4 pb-4 h-64 overflow-y-auto">
+                <DA_RecentLogsTable />
+              </div>
+            </div>
+            <div className="dashboard-card min-h-[250px] -mt-2">
+              <h2 className="text-lg lg:text-xl font-semibold text-gray-800 mb-4 text-center pt-4">
+                HTTP Response Analysis
+              </h2>
+              <div className="px-4 pb-4 h-64 overflow-y-auto">
+                <StatusCodeTable2 />
+              </div>
+            </div>
           </div>
 
-          <div className="dashboard-card h-[320px] lg:h-[360px]">
-            <DA_RecentLogsTable />
+          {/* Right Column - Vulnerability Score + Status Code + Disconnected Agents */}
+          <div className="flex flex-col gap-8">
+            <div className="dashboard-card min-h-[350px]">
+              <h2 className="text-lg lg:text-xl font-semibold text-gray-800 mb-4 text-center pt-4">
+                Vulnerability Score Overview
+              </h2>
+              <div className="px-4 pb-4 h-64 overflow-y-auto">
+                <DA_VulnerabilityScoreTable />
+              </div>
+            </div>
+            <div className="dashboard-card min-h-[350px] -mt-2">
+              <h2 className="text-lg lg:text-xl font-semibold text-gray-800 mb-4 text-center pt-4">
+                Disconnected Wazuh Agents
+              </h2>
+              <div className="px-4 pb-4 h-64 overflow-y-auto">
+                <DA_Disconnectedagent />
+              </div>
+            </div>
+            <div className="dashboard-card min-h-[250px] -mt-2">
+              <h2 className="text-lg lg:text-xl font-semibold text-gray-800 mb-4 text-center pt-4">
+                Status Code Distribution
+              </h2>
+              <div className="px-4 pb-4 h-64 overflow-y-auto">
+                <StatusCodeTable />
+              </div>
+            </div>
           </div>
-
-          <div className="dashboard-card h-[320px] lg:h-[360px]">
-            <DA_VulnerabilityScoreTable />
-          </div>
-
-        </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-          <div className="dashboard-card h-[320px] lg:h-[360px]">
-            <StatusCodeDonut />
-          </div>
-
-          <div className="dashboard-card h-[320px] lg:h-[360px]">
-            <Test />
-          </div>
-
-          <div className="dashboard-card h-[320px] lg:h-[360px]">
-            <StatusCodeDonut />
-          </div>          
-
         </div>
       </div>
       
