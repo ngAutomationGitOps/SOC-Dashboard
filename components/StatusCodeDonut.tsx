@@ -38,11 +38,14 @@ const COLORS = ['#10b981', '#f59e0b', '#f97316', '#ef4444'];
 
 export default function StatusCodeDonut() {
   const [data, setData] = useState<{ name: string; value: number }[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_BASE}/events-by-status`)
-      .then(res => res.json())
-      .then(apiData => {
+    async function fetchData() {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/events-by-status`);
+        const apiData = await res.json();
+
         if (apiData?.data) {
           // Map API data into { name, value } format and exclude 'total'
           const formatted = apiData.data
@@ -53,14 +56,48 @@ export default function StatusCodeDonut() {
             });
           setData(formatted);
         }
-      })
-      .catch(err => console.error('Error fetching events-by-status:', err));
+      } catch (err) {
+        console.error('Error fetching events-by-status:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
   }, []);
 
   return (
-    <div className="w-full h-full">
-      <ResponsiveContainer width="100%" height="100%" minHeight={320}>
-        <PieChart>
+    <div className="relative">
+      {/* Chart Container with Gradient Background */}
+      <div className="bg-gradient-to-br from-white to-gray-50 p-6 rounded-2xl shadow-lg border border-gray-100">
+        {/* Header */}
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-1">
+            Event Status Distribution
+          </h3>
+          <p className="text-sm text-gray-600">
+            HTTP response codes and event status breakdown
+          </p>
+        </div>
+
+        {/* Loading State */}
+        {loading ? (
+          <div className="flex flex-col items-center justify-center h-120 space-y-4">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <p className="text-gray-500 font-medium">Loading chart data...</p>
+          </div>
+        ) : data.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-120 space-y-4">
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+              <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <p className="text-gray-500 font-medium">No data available</p>
+          </div>
+        ) : (
+          <div className="h-120">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
           <Pie
             data={data}
             dataKey="value"
@@ -94,7 +131,7 @@ export default function StatusCodeDonut() {
               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
             }}
             formatter={(value: number, name: string) => [
-              `${value}%`,
+              `${value} events`,
               name,
             ]}
           />
@@ -111,8 +148,11 @@ export default function StatusCodeDonut() {
               marginBottom: '8px',
             }}
           />
-        </PieChart>
-      </ResponsiveContainer>
+            </PieChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -31,35 +31,36 @@ export default function EventPage() {
         </div>
 
         {/* Counter Cards */}
-        <EventCounterCards />
+        <div className="animate-fade-in">
+          <EventCounterCards />
+        </div>
 
-        {/* Primary Charts Row - Balanced Layout */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
-          {/* Event Map - Takes 1 column */}
-          <div className="dashboard-card h-[400px] lg:h-[450px]">
+        {/* Global Event Map - Full Width */}
+        <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
+          <div className="dashboard-card h-[500px] lg:h-[550px] xl:h-[600px]">
             <EventMap />
-          </div>
-
-          {/* Status Code Donut - Takes 1 column */}
-          <div className="dashboard-card h-[400px] lg:h-[450px]">
-            <StatusCodeDonut />
           </div>
         </div>
 
-        {/* Secondary Charts Grid - Perfect Balance */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Target User Bar */}
-          <div className="dashboard-card h-[320px] lg:h-[360px]">
-            <TargetUserBar />
+        {/* Charts Section - 2x2 Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          {/* Status Code Donut */}
+          <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <StatusCodeDonut />
           </div>
 
           {/* Environment Donut */}
-          <div className="dashboard-card h-[320px] lg:h-[360px]">
+          <div className="animate-fade-in" style={{ animationDelay: '0.3s' }}>
             <EnvironmentDonut />
           </div>
 
+          {/* Target User Bar */}
+          <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
+            <TargetUserBar />
+          </div>
+
           {/* Source IP Bar */}
-          <div className="dashboard-card h-[320px] lg:h-[360px]">
+          <div className="animate-fade-in" style={{ animationDelay: '0.5s' }}>
             <SourceIpBar />
           </div>
         </div>
@@ -67,12 +68,12 @@ export default function EventPage() {
         {/* Data Tables Section - Full Width */}
         <div className="space-y-6">
           {/* Impacted Servers Table */}
-          <div className="dashboard-card">
+          <div className="dashboard-card animate-fade-in" style={{ animationDelay: '0.6s' }}>
             <ImpactedServersTable />
           </div>
 
           {/* Recent Logs Table */}
-          <div className="dashboard-card">
+          <div className="dashboard-card animate-fade-in" style={{ animationDelay: '0.7s' }}>
             <RecentLogsTable />
           </div>
         </div>
