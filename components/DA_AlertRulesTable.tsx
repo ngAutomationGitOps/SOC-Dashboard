@@ -72,6 +72,127 @@
 // }
 
 
+// 'use client';
+
+// import { useEffect, useState } from 'react';
+
+// type ApiItem = {
+//   Alert_rule_name: string;
+//   Rule_category: string;
+//   Rule_confidence: 'Low' | 'Medium' | 'High' | 'Critical' | null;
+//   Reference: string;
+//   Count: number;
+// };
+
+// type AlertRule = {
+//   category: string;
+//   count: number;
+//   severity: 'Low' | 'Medium' | 'High' | 'Critical';
+// };
+
+// const severityStyles: Record<string, string> = {
+//   Low: 'bg-green-100 text-green-800',
+//   Medium: 'bg-yellow-400 text-yellow-900',
+//   High: 'bg-orange-500 text-white',
+//   Critical: 'bg-red-600 text-white',
+// };
+
+// export default function SO_AlertRulesTable() {
+//   const [data, setData] = useState<AlertRule[]>([]);
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const res = await fetch('http://10.0.20.235/alert-rules');
+//         const json = await res.json();
+
+//         const grouped: Record<string, AlertRule> = {};
+
+//         (json.data as ApiItem[]).forEach((item) => {
+//           const category = item.Rule_category || 'Others';
+//           const severity =
+//             item.Rule_confidence === 'Critical'
+//               ? 'Critical'
+//               : item.Rule_confidence === 'High'
+//               ? 'High'
+//               : item.Rule_confidence === 'Medium'
+//               ? 'Medium'
+//               : 'Low';
+
+//           if (!grouped[category]) {
+//             grouped[category] = {
+//               category,
+//               count: 0,
+//               severity,
+//             };
+//           }
+
+//           grouped[category].count += item.Count;
+//         });
+
+//         // Convert to array, sort by count desc, take top 5
+//         const formattedData = Object.values(grouped)
+//           .sort((a, b) => b.count - a.count)
+//           .slice(0, 5);
+
+//         setData(formattedData);
+//       } catch (error) {
+//         console.error('Failed to fetch alert rules', error);
+//       }
+//     };
+
+//     fetchData();
+//   }, []);
+
+//   return (
+//     <div className="h-full flex flex-col">
+//       <div className="flex-1 overflow-auto">
+//         <table className="min-w-full table-auto text-sm">
+//           <thead className="bg-gray-50 sticky top-0">
+//             <tr>
+//               <th className="px-4 py-3 text-left font-semibold text-gray-700">Rule Category</th>
+//               <th className="px-4 py-3 text-center font-semibold text-gray-700 w-24">Count</th>
+//               <th className="px-4 py-3 text-center font-semibold text-gray-700 w-28">Severity</th>
+//             </tr>
+//           </thead>
+
+//           <tbody>
+//             {data.map((rule, index) => (
+//               <tr
+//                 key={index}
+//                 className="border-b last:border-b-0 hover:bg-gray-50 text-sm"
+//               >
+//                 <td className="px-4 py-3">{rule.category}</td>
+
+//                 <td className="px-4 py-3 text-center font-semibold">
+//                   {rule.count.toLocaleString()}
+//                 </td>
+
+//                 <td className="px-4 py-3 text-center">
+//                   <span
+//                     className={`px-3 py-1 rounded-md text-xs font-semibold ${severityStyles[rule.severity]}`}
+//                   >
+//                     {rule.severity}
+//                   </span>
+//                 </td>
+//               </tr>
+//             ))}
+
+//             {data.length === 0 && (
+//               <tr>
+//                 <td colSpan={3} className="text-center py-6 text-gray-400">
+//                   No data available
+//                 </td>
+//               </tr>
+//             )}
+//           </tbody>
+//         </table>
+//       </div>
+//     </div>
+//   );
+// }
+
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -90,11 +211,18 @@ type AlertRule = {
   severity: 'Low' | 'Medium' | 'High' | 'Critical';
 };
 
-const severityStyles: Record<string, string> = {
+const severityStyles: Record<AlertRule['severity'], string> = {
   Low: 'bg-green-100 text-green-800',
   Medium: 'bg-yellow-400 text-yellow-900',
   High: 'bg-orange-500 text-white',
   Critical: 'bg-red-600 text-white',
+};
+
+const severityPriority: Record<AlertRule['severity'], number> = {
+  Critical: 1,
+  High: 2,
+  Medium: 3,
+  Low: 4,
 };
 
 export default function SO_AlertRulesTable() {
@@ -110,7 +238,8 @@ export default function SO_AlertRulesTable() {
 
         (json.data as ApiItem[]).forEach((item) => {
           const category = item.Rule_category || 'Others';
-          const severity =
+
+          const severity: AlertRule['severity'] =
             item.Rule_confidence === 'Critical'
               ? 'Critical'
               : item.Rule_confidence === 'High'
@@ -128,12 +257,21 @@ export default function SO_AlertRulesTable() {
           }
 
           grouped[category].count += item.Count;
+
+          // keep highest severity
+          if (
+            severityPriority[severity] <
+            severityPriority[grouped[category].severity]
+          ) {
+            grouped[category].severity = severity;
+          }
         });
 
-        // Convert to array, sort by count desc, take top 5
-        const formattedData = Object.values(grouped)
-          .sort((a, b) => b.count - a.count)
-          .slice(0, 5);
+        // 🔑 Sort ONLY by severity (no limit)
+        const formattedData = Object.values(grouped).sort(
+          (a, b) =>
+            severityPriority[a.severity] - severityPriority[b.severity]
+        );
 
         setData(formattedData);
       } catch (error) {
@@ -146,13 +284,20 @@ export default function SO_AlertRulesTable() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex-1 overflow-auto">
+      {/* 🔽 Scroll container */}
+      <div className="flex-1 overflow-y-auto">
         <table className="min-w-full table-auto text-sm">
-          <thead className="bg-gray-50 sticky top-0">
+          <thead className="bg-gray-50 sticky top-0 z-10">
             <tr>
-              <th className="px-4 py-3 text-left font-semibold text-gray-700">Rule Category</th>
-              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-24">Count</th>
-              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-28">Severity</th>
+              <th className="px-4 py-3 text-left font-semibold text-gray-700">
+                Rule Category
+              </th>
+              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-24">
+                Count
+              </th>
+              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-28">
+                Severity
+              </th>
             </tr>
           </thead>
 
@@ -160,7 +305,7 @@ export default function SO_AlertRulesTable() {
             {data.map((rule, index) => (
               <tr
                 key={index}
-                className="border-b last:border-b-0 hover:bg-gray-50 text-sm"
+                className="border-b last:border-b-0 hover:bg-gray-50"
               >
                 <td className="px-4 py-3">{rule.category}</td>
 
