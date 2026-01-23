@@ -1047,19 +1047,299 @@
 
 
 
+// 'use client';
+
+// import { useState, useEffect } from 'react';
+
+// // ================= TABLE COMPONENTS =================
+// const Table = ({ children, className = '', ...rest }: React.HTMLAttributes<HTMLTableElement>) => (
+//   <table {...rest} className={`w-full text-sm text-left border-collapse ${className}`}>
+//     {children}
+//   </table>
+// );
+
+// const TableHeader = ({ children }: { children: React.ReactNode }) => (
+//   <thead className="bg-gray-100 text-gray-700 sticky top-0 z-10">{children}</thead>
+// );
+
+// const TableBody = ({ children }: { children: React.ReactNode }) => (
+//   <tbody className="divide-y divide-gray-200">{children}</tbody>
+// );
+
+// const TableRow = ({ children }: { children: React.ReactNode }) => (
+//   <tr className="hover:bg-gray-50">{children}</tr>
+// );
+
+// const TableHead = ({
+//   children,
+//   className = '',
+//   ...rest
+// }: React.ThHTMLAttributes<HTMLTableHeaderCellElement>) => (
+//   <th {...rest} className="px-4 py-2 text-xs font-semibold uppercase tracking-wider">
+//     {children}
+//   </th>
+// );
+
+// const TableCell = ({
+//   children,
+//   className = '',
+//   ...rest
+// }: React.TdHTMLAttributes<HTMLTableCellElement>) => (
+//   <td {...rest} className={`px-4 py-2 whitespace-nowrap ${className}`}>
+//     {children}
+//   </td>
+// );
+
+// // ================= STATUS BADGE =================
+// const StatusBadge = ({ status }: { status: string }) => {
+//   let style = 'bg-gray-300 text-gray-800';
+
+//   if (status?.toLowerCase() === 'active') {
+//     style = 'bg-green-500 text-white';
+//   } else if (
+//     status?.toLowerCase() === 'disconnected' ||
+//     status?.toLowerCase() === 'decommissioned'
+//   ) {
+//     style = 'bg-red-500 text-white';
+//   }
+
+//   return (
+//     <span className={`px-2 py-1 rounded text-xs font-semibold ${style}`}>
+//       {status || '-'}
+//     </span>
+//   );
+// };
+
+// // ================= EOL UTILITIES =================
+// const getDaysDiff = (dateString?: string | null) => {
+//   if (!dateString || dateString === '-') return null;
+
+//   const today = new Date();
+//   today.setHours(0, 0, 0, 0);
+
+//   const target = new Date(dateString);
+//   const diffTime = target.getTime() - today.getTime();
+//   return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+// };
+
+// const getEolMeta = (dateString?: string | null) => {
+//   const diff = getDaysDiff(dateString);
+
+//   if (diff === null) return null;
+
+//   if (diff < 0) {
+//     return {
+//       priority: 1,
+//       className: 'bg-red-500 text-white',
+//       label: `${dateString} (Expired)`,
+//       tooltip: `Expired ${Math.abs(diff)} days ago`,
+//     };
+//   }
+
+//   if (diff <= 30) {
+//     return {
+//       priority: 2,
+//       className: 'bg-orange-500 text-white',
+//       label: `${dateString}`,
+//       tooltip: `Expiring in ${diff} days`,
+//     };
+//   }
+
+//   if (diff <= 90) {
+//     return {
+//       priority: 3,
+//       className: 'bg-yellow-400 text-black',
+//       label: `${dateString}`,
+//       tooltip: `Expiring in ${diff} days`,
+//     };
+//   }
+
+//   return {
+//     priority: 4,
+//     className: '',
+//     label: dateString,
+//     tooltip: `Valid for ${diff} days`,
+//   };
+// };
+
+// // ================= TYPES =================
+// type ServerItem = {
+//   server_environment: string;
+//   agent_name: string;
+//   ip_address: string;
+//   server_owner: string;
+//   client_name: string | null;
+//   cs_owner: string | null;
+//   wazuh_status: string;
+//   end_of_life: string | null;
+//   extended_support_end_date: string | null;
+// };
+
+// // ================= MAIN COMPONENT =================
+// export default function ServerTable() {
+//   const [data, setData] = useState<ServerItem[]>([]);
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const rowsPerPage = 15;
+//   const [loading, setLoading] = useState(true);
+//   const [searchTerm, setSearchTerm] = useState('');
+
+//   useEffect(() => {
+//     const fetchServers = async () => {
+//       try {
+//         const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/agents-info`);
+//         const json = await res.json();
+
+//         const normalized: ServerItem[] = json.data.map((item: any) => ({
+//           server_environment: item.Server_Environment || '',
+//           agent_name: item.Agent_Name || '',
+//           ip_address: item.Ip_Address || '',
+//           server_owner: item.Server_Owner || '',
+//           client_name: item.client_name || '-',
+//           cs_owner: item.cs_owner || '-',
+//           wazuh_status: item.wazuh_status || '-',
+//           end_of_life: item.end_of_life || '-',
+//           extended_support_end_date: item.extended_support_end_date || '-',
+//         }));
+
+//         setData(normalized);
+//       } catch (err) {
+//         console.error('Failed to fetch server data:', err);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchServers();
+//   }, []);
+
+//   // ================= FILTER + SORT =================
+//   const filteredData = data
+//     .filter((row) =>
+//       row.server_environment.toLowerCase().includes(searchTerm.toLowerCase())
+//     )
+//     .sort((a, b) => {
+//       const aMeta = getEolMeta(a.end_of_life);
+//       const bMeta = getEolMeta(b.end_of_life);
+
+//       return (aMeta?.priority ?? 5) - (bMeta?.priority ?? 5);
+//     });
+
+//   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+//   const startIndex = (currentPage - 1) * rowsPerPage;
+//   const currentData = filteredData.slice(startIndex, startIndex + rowsPerPage);
+
+//   return (
+//     <div className="w-full bg-white p-4 rounded-2xl shadow border border-gray-200">
+//       <h2 className="text-lg font-semibold mb-4 text-gray-800">Servers Table</h2>
+
+//       {loading ? (
+//         <p className="text-gray-600">Loading...</p>
+//       ) : (
+//         <>
+//           <div className="mb-4">
+//             <input
+//               type="text"
+//               placeholder="Filter by Server Environment..."
+//               value={searchTerm}
+//               onChange={(e) => {
+//                 setSearchTerm(e.target.value);
+//                 setCurrentPage(1);
+//               }}
+//               className="border px-3 py-2 rounded w-1/3"
+//             />
+//           </div>
+
+//           <div className="overflow-x-auto w-full max-h-[600px] overflow-y-auto">
+//             <Table>
+//               <TableHeader>
+//                 <TableRow>
+//                   <TableHead>Server Env</TableHead>
+//                   <TableHead>Agent Name</TableHead>
+//                   <TableHead>IP Address</TableHead>
+//                   <TableHead>Server Owner</TableHead>
+//                   <TableHead>Client Name</TableHead>
+//                   <TableHead>CS Owner</TableHead>
+//                   <TableHead>Wazuh Status</TableHead>
+//                   <TableHead>End of Life</TableHead>
+//                   <TableHead>Extended Support</TableHead>
+//                 </TableRow>
+//               </TableHeader>
+
+//               <TableBody>
+//                 {currentData.map((row, idx) => {
+//                   const eol = getEolMeta(row.end_of_life);
+
+//                   return (
+//                     <TableRow key={idx}>
+//                       <TableCell>{row.server_environment}</TableCell>
+//                       <TableCell>{row.agent_name}</TableCell>
+//                       <TableCell>{row.ip_address}</TableCell>
+//                       <TableCell>{row.server_owner}</TableCell>
+//                       <TableCell>{row.client_name}</TableCell>
+//                       <TableCell>{row.cs_owner}</TableCell>
+//                       <TableCell>
+//                         <StatusBadge status={row.wazuh_status} />
+//                       </TableCell>
+
+//                       <TableCell title={eol?.tooltip}>
+//                         {eol?.className ? (
+//                           <span className={`px-2 py-1 rounded text-xs font-semibold ${eol.className}`}>
+//                             {eol.label}
+//                           </span>
+//                         ) : (
+//                           row.end_of_life
+//                         )}
+//                       </TableCell>
+
+//                       <TableCell>{row.extended_support_end_date}</TableCell>
+//                     </TableRow>
+//                   );
+//                 })}
+//               </TableBody>
+//             </Table>
+//           </div>
+
+//           {totalPages > 1 && (
+//             <div className="flex justify-between items-center mt-4">
+//               <button
+//                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+//                 disabled={currentPage === 1}
+//                 className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+//               >
+//                 Prev
+//               </button>
+
+//               <span className="text-sm text-gray-600">
+//                 Page {currentPage} of {totalPages}
+//               </span>
+
+//               <button
+//                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+//                 disabled={currentPage === totalPages}
+//                 className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+//               >
+//                 Next
+//               </button>
+//             </div>
+//           )}
+//         </>
+//       )}
+//     </div>
+//   );
+// }
+
+
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-// ================= TABLE COMPONENTS =================
-const Table = ({ children, className = '', ...rest }: React.HTMLAttributes<HTMLTableElement>) => (
-  <table {...rest} className={`w-full text-sm text-left border-collapse ${className}`}>
-    {children}
-  </table>
+/* ================= TABLE UI ================= */
+const Table = ({ children }: { children: React.ReactNode }) => (
+  <table className="w-full text-sm text-left border-collapse">{children}</table>
 );
 
 const TableHeader = ({ children }: { children: React.ReactNode }) => (
-  <thead className="bg-gray-100 text-gray-700 sticky top-0 z-10">{children}</thead>
+  <thead className="bg-gray-100 sticky top-0 z-10">{children}</thead>
 );
 
 const TableBody = ({ children }: { children: React.ReactNode }) => (
@@ -1070,259 +1350,247 @@ const TableRow = ({ children }: { children: React.ReactNode }) => (
   <tr className="hover:bg-gray-50">{children}</tr>
 );
 
-const TableHead = ({
-  children,
-  className = '',
-  ...rest
-}: React.ThHTMLAttributes<HTMLTableHeaderCellElement>) => (
-  <th {...rest} className="px-4 py-2 text-xs font-semibold uppercase tracking-wider">
+const TableHead = ({ children }: { children: React.ReactNode }) => (
+  <th className="px-4 py-2 text-xs font-semibold uppercase tracking-wider">
     {children}
   </th>
 );
 
-const TableCell = ({
-  children,
-  className = '',
-  ...rest
-}: React.TdHTMLAttributes<HTMLTableCellElement>) => (
-  <td {...rest} className={`px-4 py-2 whitespace-nowrap ${className}`}>
-    {children}
-  </td>
+const TableCell = ({ children }: { children: React.ReactNode }) => (
+  <td className="px-4 py-2 whitespace-nowrap">{children}</td>
 );
 
-// ================= STATUS BADGE =================
+/* ================= STATUS BADGE ================= */
+// const StatusBadge = ({ status }: { status: string }) => {
+//   let cls = 'bg-gray-300 text-gray-800';
+
+//   if (status?.toLowerCase() === 'active') cls = 'bg-green-500 text-white';
+//   if (status?.toLowerCase() === 'disconnected')
+//     cls = 'bg-red-500 text-white';
+
+//   return (
+//     <span className={`px-2 py-1 rounded text-xs font-semibold ${cls}`}>
+//       {status || '-'}
+//     </span>
+//   );
+// };
+
+
 const StatusBadge = ({ status }: { status: string }) => {
-  let style = 'bg-gray-300 text-gray-800';
+  let cls = 'bg-gray-300 text-gray-800';
 
   if (status?.toLowerCase() === 'active') {
-    style = 'bg-green-500 text-white';
-  } else if (
-    status?.toLowerCase() === 'disconnected' ||
-    status?.toLowerCase() === 'decommissioned'
-  ) {
-    style = 'bg-red-500 text-white';
+    cls = 'bg-green-500 text-white';
+  } else if (status?.toLowerCase() === 'disconnected') {
+    cls = 'bg-blue-500 text-white';   // 🔵 DISCONNECTED = BLUE
+  } else if (status?.toLowerCase() === 'decommissioned') {
+    cls = 'bg-red-500 text-white';
   }
 
   return (
-    <span className={`px-2 py-1 rounded text-xs font-semibold ${style}`}>
+    <span className={`px-2 py-1 rounded text-xs font-semibold ${cls}`}>
       {status || '-'}
     </span>
   );
 };
 
-// ================= EOL UTILITIES =================
-const getDaysDiff = (dateString?: string | null) => {
-  if (!dateString || dateString === '-') return null;
+/* ================= EOL LOGIC ================= */
+const daysDiff = (date?: string | null) => {
+  if (!date || date === '-') return null;
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+  const target = new Date(date);
 
-  const target = new Date(dateString);
-  const diffTime = target.getTime() - today.getTime();
-  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return Math.ceil((target.getTime() - today.getTime()) / 86400000);
 };
 
-const getEolMeta = (dateString?: string | null) => {
-  const diff = getDaysDiff(dateString);
-
+const getEolMeta = (date?: string | null) => {
+  const diff = daysDiff(date);
   if (diff === null) return null;
 
-  if (diff < 0) {
+  if (diff < 0)
     return {
       priority: 1,
-      className: 'bg-red-500 text-white',
-      label: `${dateString} (Expired)`,
+      className: 'bg-red-600 text-white',
+      label: `${date} (Expired)`,
       tooltip: `Expired ${Math.abs(diff)} days ago`,
     };
-  }
 
-  if (diff <= 30) {
+  if (diff <= 30)
     return {
       priority: 2,
       className: 'bg-orange-500 text-white',
-      label: `${dateString}`,
+      label: date,
       tooltip: `Expiring in ${diff} days`,
     };
-  }
 
-  if (diff <= 90) {
+  if (diff <= 90)
     return {
       priority: 3,
       className: 'bg-yellow-400 text-black',
-      label: `${dateString}`,
+      label: date,
       tooltip: `Expiring in ${diff} days`,
     };
-  }
 
   return {
     priority: 4,
     className: '',
-    label: dateString,
+    label: date,
     tooltip: `Valid for ${diff} days`,
   };
 };
 
-// ================= TYPES =================
+/* ================= TYPES ================= */
 type ServerItem = {
   server_environment: string;
   agent_name: string;
   ip_address: string;
+  os_name: string;
   server_owner: string;
-  client_name: string | null;
-  cs_owner: string | null;
+  client_name: string;
+  cs_owner: string;
   wazuh_status: string;
-  end_of_life: string | null;
-  extended_support_end_date: string | null;
+  end_of_life: string;
+  extended_support_end_date: string;
 };
 
-// ================= MAIN COMPONENT =================
+/* ================= MAIN ================= */
 export default function ServerTable() {
   const [data, setData] = useState<ServerItem[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 15;
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const rowsPerPage = 15;
 
   useEffect(() => {
-    const fetchServers = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/agents-info`);
-        const json = await res.json();
-
-        const normalized: ServerItem[] = json.data.map((item: any) => ({
-          server_environment: item.Server_Environment || '',
-          agent_name: item.Agent_Name || '',
-          ip_address: item.Ip_Address || '',
-          server_owner: item.Server_Owner || '',
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE}/agents-info`)
+      .then((res) => res.json())
+      .then((json) => {
+        const normalized = json.data.map((item: any) => ({
+          server_environment: item.Server_Environment || '-',
+          agent_name: item.Agent_Name || '-',
+          ip_address: item.Ip_Address || '-',
+          os_name: item.Os || '-',               // ✅ OS NAME ADDED
+          server_owner: item.Server_Owner || '-',
           client_name: item.client_name || '-',
           cs_owner: item.cs_owner || '-',
           wazuh_status: item.wazuh_status || '-',
           end_of_life: item.end_of_life || '-',
-          extended_support_end_date: item.extended_support_end_date || '-',
+          extended_support_end_date:
+            item.extended_support_end_date || '-',
         }));
-
         setData(normalized);
-      } catch (err) {
-        console.error('Failed to fetch server data:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchServers();
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  // ================= FILTER + SORT =================
-  const filteredData = data
-    .filter((row) =>
-      row.server_environment.toLowerCase().includes(searchTerm.toLowerCase())
+  const filtered = data
+    .filter((r) =>
+      r.server_environment.toLowerCase().includes(search.toLowerCase())
     )
-    .sort((a, b) => {
-      const aMeta = getEolMeta(a.end_of_life);
-      const bMeta = getEolMeta(b.end_of_life);
+    .sort(
+      (a, b) =>
+        (getEolMeta(a.end_of_life)?.priority ?? 5) -
+        (getEolMeta(b.end_of_life)?.priority ?? 5)
+    );
 
-      return (aMeta?.priority ?? 5) - (bMeta?.priority ?? 5);
-    });
-
-  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-  const startIndex = (currentPage - 1) * rowsPerPage;
-  const currentData = filteredData.slice(startIndex, startIndex + rowsPerPage);
+  const start = (page - 1) * rowsPerPage;
+  const pageData = filtered.slice(start, start + rowsPerPage);
+  const totalPages = Math.ceil(filtered.length / rowsPerPage);
 
   return (
-    <div className="w-full bg-white p-4 rounded-2xl shadow border border-gray-200">
-      <h2 className="text-lg font-semibold mb-4 text-gray-800">Servers Table</h2>
+    <div className="bg-white p-4 rounded-2xl shadow border">
+      <h2 className="text-lg font-semibold mb-3">Agents Lifecycle Status</h2>
 
-      {loading ? (
-        <p className="text-gray-600">Loading...</p>
-      ) : (
-        <>
-          <div className="mb-4">
-            <input
-              type="text"
-              placeholder="Filter by Server Environment..."
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setCurrentPage(1);
-              }}
-              className="border px-3 py-2 rounded w-1/3"
-            />
-          </div>
+      <input
+        className="border px-3 py-2 rounded mb-4 w-1/3"
+        placeholder="Filter by Server Environment"
+        onChange={(e) => {
+          setSearch(e.target.value);
+          setPage(1);
+        }}
+      />
 
-          <div className="overflow-x-auto w-full max-h-[600px] overflow-y-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Server Env</TableHead>
-                  <TableHead>Agent Name</TableHead>
-                  <TableHead>IP Address</TableHead>
-                  <TableHead>Server Owner</TableHead>
-                  <TableHead>Client Name</TableHead>
-                  <TableHead>CS Owner</TableHead>
-                  <TableHead>Wazuh Status</TableHead>
-                  <TableHead>End of Life</TableHead>
-                  <TableHead>Extended Support</TableHead>
+      <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Env</TableHead>
+              <TableHead>Agent</TableHead>
+              <TableHead>IP</TableHead>
+              <TableHead>Wazuh</TableHead>
+
+              {/* <TableHead>OS Name</TableHead> */}
+              {/* <TableHead>Owner</TableHead> */}
+              <TableHead>Client</TableHead>
+              <TableHead>CS Owner</TableHead>
+              <TableHead>OS Name</TableHead>
+              {/* <TableHead>Wazuh</TableHead> */}
+              <TableHead>End of Life</TableHead>
+              <TableHead>Extended Support</TableHead>
+            </TableRow>
+          </TableHeader>
+
+          <TableBody>
+            {pageData.map((row, i) => {
+              const eol = getEolMeta(row.end_of_life);
+
+              return (
+                <TableRow key={i}>
+                  <TableCell>{row.server_environment}</TableCell>
+                  <TableCell>{row.agent_name}</TableCell>
+                  <TableCell>{row.ip_address}</TableCell>
+                  {/* <TableCell>{row.os_name}</TableCell> */}
+                  <TableCell>
+                    <StatusBadge status={row.wazuh_status} />
+                  </TableCell>
+                  {/* <TableCell>{row.server_owner}</TableCell> */}
+                  <TableCell>{row.client_name}</TableCell>
+                  <TableCell>{row.cs_owner}</TableCell>
+                  {/* <TableCell>
+                    <StatusBadge status={row.wazuh_status} />
+                  </TableCell> */}
+                  <TableCell>{row.os_name}</TableCell>
+                  <TableCell title={eol?.tooltip}>
+                    {eol?.className ? (
+                      <span
+                        className={`px-2 py-1 rounded text-xs font-semibold ${eol.className}`}
+                      >
+                        {eol.label}
+                      </span>
+                    ) : (
+                      row.end_of_life
+                    )}
+                  </TableCell>
+                  <TableCell>{row.extended_support_end_date}</TableCell>
                 </TableRow>
-              </TableHeader>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
 
-              <TableBody>
-                {currentData.map((row, idx) => {
-                  const eol = getEolMeta(row.end_of_life);
-
-                  return (
-                    <TableRow key={idx}>
-                      <TableCell>{row.server_environment}</TableCell>
-                      <TableCell>{row.agent_name}</TableCell>
-                      <TableCell>{row.ip_address}</TableCell>
-                      <TableCell>{row.server_owner}</TableCell>
-                      <TableCell>{row.client_name}</TableCell>
-                      <TableCell>{row.cs_owner}</TableCell>
-                      <TableCell>
-                        <StatusBadge status={row.wazuh_status} />
-                      </TableCell>
-
-                      <TableCell title={eol?.tooltip}>
-                        {eol?.className ? (
-                          <span className={`px-2 py-1 rounded text-xs font-semibold ${eol.className}`}>
-                            {eol.label}
-                          </span>
-                        ) : (
-                          row.end_of_life
-                        )}
-                      </TableCell>
-
-                      <TableCell>{row.extended_support_end_date}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </div>
-
-          {totalPages > 1 && (
-            <div className="flex justify-between items-center mt-4">
-              <button
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-              >
-                Prev
-              </button>
-
-              <span className="text-sm text-gray-600">
-                Page {currentPage} of {totalPages}
-              </span>
-
-              <button
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                disabled={currentPage === totalPages}
-                className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-              >
-                Next
-              </button>
-            </div>
-          )}
-        </>
+      {totalPages > 1 && (
+        <div className="flex justify-between mt-4">
+          <button
+            disabled={page === 1}
+            onClick={() => setPage((p) => p - 1)}
+            className="px-3 py-1 bg-gray-200 rounded"
+          >
+            Prev
+          </button>
+          <span className="text-sm text-gray-600">
+            Page {page} / {totalPages}
+          </span>
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage((p) => p + 1)}
+            className="px-3 py-1 bg-gray-200 rounded"
+          >
+            Next
+          </button>
+        </div>
       )}
     </div>
   );
