@@ -1329,6 +1329,276 @@
 // }
 
 
+// 'use client';
+
+// import { useEffect, useState } from 'react';
+
+// /* ================= TABLE UI ================= */
+// const Table = ({ children }: { children: React.ReactNode }) => (
+//   <table className="w-full text-sm text-left border-collapse">{children}</table>
+// );
+
+// const TableHeader = ({ children }: { children: React.ReactNode }) => (
+//   <thead className="bg-gray-100 sticky top-0 z-10">{children}</thead>
+// );
+
+// const TableBody = ({ children }: { children: React.ReactNode }) => (
+//   <tbody className="divide-y divide-gray-200">{children}</tbody>
+// );
+
+// const TableRow = ({ children }: { children: React.ReactNode }) => (
+//   <tr className="hover:bg-gray-50">{children}</tr>
+// );
+
+// const TableHead = ({ children }: { children: React.ReactNode }) => (
+//   <th className="px-4 py-2 text-xs font-semibold uppercase tracking-wider">
+//     {children}
+//   </th>
+// );
+
+// const TableCell = ({ children }: { children: React.ReactNode }) => (
+//   <td className="px-4 py-2 whitespace-nowrap">{children}</td>
+// );
+
+// /* ================= STATUS BADGE ================= */
+// // const StatusBadge = ({ status }: { status: string }) => {
+// //   let cls = 'bg-gray-300 text-gray-800';
+
+// //   if (status?.toLowerCase() === 'active') cls = 'bg-green-500 text-white';
+// //   if (status?.toLowerCase() === 'disconnected')
+// //     cls = 'bg-red-500 text-white';
+
+// //   return (
+// //     <span className={`px-2 py-1 rounded text-xs font-semibold ${cls}`}>
+// //       {status || '-'}
+// //     </span>
+// //   );
+// // };
+
+
+// const StatusBadge = ({ status }: { status: string }) => {
+//   let cls = 'bg-gray-300 text-gray-800';
+
+//   if (status?.toLowerCase() === 'active') {
+//     cls = 'bg-green-500 text-white';
+//   } else if (status?.toLowerCase() === 'disconnected') {
+//     cls = 'bg-blue-500 text-white';   // 🔵 DISCONNECTED = BLUE
+//   } else if (status?.toLowerCase() === 'decommissioned') {
+//     cls = 'bg-red-500 text-white';
+//   }
+
+//   return (
+//     <span className={`px-2 py-1 rounded text-xs font-semibold ${cls}`}>
+//       {status || '-'}
+//     </span>
+//   );
+// };
+
+// /* ================= EOL LOGIC ================= */
+// const daysDiff = (date?: string | null) => {
+//   if (!date || date === '-') return null;
+
+//   const today = new Date();
+//   today.setHours(0, 0, 0, 0);
+//   const target = new Date(date);
+
+//   return Math.ceil((target.getTime() - today.getTime()) / 86400000);
+// };
+
+// const getEolMeta = (date?: string | null) => {
+//   const diff = daysDiff(date);
+//   if (diff === null) return null;
+
+//   if (diff < 0)
+//     return {
+//       priority: 1,
+//       className: 'bg-red-600 text-white',
+//       label: `${date} (Expired)`,
+//       tooltip: `Expired ${Math.abs(diff)} days ago`,
+//     };
+
+//   if (diff <= 30)
+//     return {
+//       priority: 2,
+//       className: 'bg-orange-500 text-white',
+//       label: date,
+//       tooltip: `Expiring in ${diff} days`,
+//     };
+
+//   if (diff <= 90)
+//     return {
+//       priority: 3,
+//       className: 'bg-yellow-400 text-black',
+//       label: date,
+//       tooltip: `Expiring in ${diff} days`,
+//     };
+
+//   return {
+//     priority: 4,
+//     className: '',
+//     label: date,
+//     tooltip: `Valid for ${diff} days`,
+//   };
+// };
+
+// /* ================= TYPES ================= */
+// type ServerItem = {
+//   server_environment: string;
+//   agent_name: string;
+//   ip_address: string;
+//   os_name: string;
+//   server_owner: string;
+//   client_name: string;
+//   cs_owner: string;
+//   wazuh_status: string;
+//   end_of_life: string;
+//   extended_support_end_date: string;
+// };
+
+// /* ================= MAIN ================= */
+// export default function ServerTable() {
+//   const [data, setData] = useState<ServerItem[]>([]);
+//   const [loading, setLoading] = useState(true);
+//   const [search, setSearch] = useState('');
+//   const [page, setPage] = useState(1);
+//   const rowsPerPage = 15;
+
+//   useEffect(() => {
+//     fetch(`${process.env.NEXT_PUBLIC_API_BASE}/agents-info`)
+//       .then((res) => res.json())
+//       .then((json) => {
+//         const normalized = json.data.map((item: any) => ({
+//           server_environment: item.Server_Environment || '-',
+//           agent_name: item.Agent_Name || '-',
+//           ip_address: item.Ip_Address || '-',
+//           os_name: item.Os || '-',               // ✅ OS NAME ADDED
+//           server_owner: item.Server_Owner || '-',
+//           client_name: item.client_name || '-',
+//           cs_owner: item.cs_owner || '-',
+//           wazuh_status: item.wazuh_status || '-',
+//           end_of_life: item.end_of_life || '-',
+//           extended_support_end_date:
+//             item.extended_support_end_date || '-',
+//         }));
+//         setData(normalized);
+//       })
+//       .finally(() => setLoading(false));
+//   }, []);
+
+//   const filtered = data
+//     .filter((r) =>
+//       r.server_environment.toLowerCase().includes(search.toLowerCase())
+//     )
+//     .sort(
+//       (a, b) =>
+//         (getEolMeta(a.end_of_life)?.priority ?? 5) -
+//         (getEolMeta(b.end_of_life)?.priority ?? 5)
+//     );
+
+//   const start = (page - 1) * rowsPerPage;
+//   const pageData = filtered.slice(start, start + rowsPerPage);
+//   const totalPages = Math.ceil(filtered.length / rowsPerPage);
+
+//   return (
+//     <div className="bg-white p-4 rounded-2xl shadow border">
+//       <h2 className="text-lg font-semibold mb-3">Agents Lifecycle Status</h2>
+
+//       <input
+//         className="border px-3 py-2 rounded mb-4 w-1/3"
+//         placeholder="Filter by Server Environment"
+//         onChange={(e) => {
+//           setSearch(e.target.value);
+//           setPage(1);
+//         }}
+//       />
+
+//       <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
+//         <Table>
+//           <TableHeader>
+//             <TableRow>
+//               <TableHead>Env</TableHead>
+//               <TableHead>Agent</TableHead>
+//               <TableHead>IP</TableHead>
+//               <TableHead>Wazuh</TableHead>
+
+//               {/* <TableHead>OS Name</TableHead> */}
+//               {/* <TableHead>Owner</TableHead> */}
+//               <TableHead>Client</TableHead>
+//               <TableHead>CS Owner</TableHead>
+//               <TableHead>OS Name</TableHead>
+//               {/* <TableHead>Wazuh</TableHead> */}
+//               <TableHead>End of Life</TableHead>
+//               <TableHead>Extended Support</TableHead>
+//             </TableRow>
+//           </TableHeader>
+
+//           <TableBody>
+//             {pageData.map((row, i) => {
+//               const eol = getEolMeta(row.end_of_life);
+
+//               return (
+//                 <TableRow key={i}>
+//                   <TableCell>{row.server_environment}</TableCell>
+//                   <TableCell>{row.agent_name}</TableCell>
+//                   <TableCell>{row.ip_address}</TableCell>
+//                   {/* <TableCell>{row.os_name}</TableCell> */}
+//                   <TableCell>
+//                     <StatusBadge status={row.wazuh_status} />
+//                   </TableCell>
+//                   {/* <TableCell>{row.server_owner}</TableCell> */}
+//                   <TableCell>{row.client_name}</TableCell>
+//                   <TableCell>{row.cs_owner}</TableCell>
+//                   {/* <TableCell>
+//                     <StatusBadge status={row.wazuh_status} />
+//                   </TableCell> */}
+//                   <TableCell>{row.os_name}</TableCell>
+//                   <TableCell title={eol?.tooltip}>
+//                     {eol?.className ? (
+//                       <span
+//                         className={`px-2 py-1 rounded text-xs font-semibold ${eol.className}`}
+//                       >
+//                         {eol.label}
+//                       </span>
+//                     ) : (
+//                       row.end_of_life
+//                     )}
+//                   </TableCell>
+//                   <TableCell>{row.extended_support_end_date}</TableCell>
+//                 </TableRow>
+//               );
+//             })}
+//           </TableBody>
+//         </Table>
+//       </div>
+
+//       {totalPages > 1 && (
+//         <div className="flex justify-between mt-4">
+//           <button
+//             disabled={page === 1}
+//             onClick={() => setPage((p) => p - 1)}
+//             className="px-3 py-1 bg-gray-200 rounded"
+//           >
+//             Prev
+//           </button>
+//           <span className="text-sm text-gray-600">
+//             Page {page} / {totalPages}
+//           </span>
+//           <button
+//             disabled={page === totalPages}
+//             onClick={() => setPage((p) => p + 1)}
+//             className="px-3 py-1 bg-gray-200 rounded"
+//           >
+//             Next
+//           </button>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+
+
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -1356,33 +1626,25 @@ const TableHead = ({ children }: { children: React.ReactNode }) => (
   </th>
 );
 
-const TableCell = ({ children }: { children: React.ReactNode }) => (
-  <td className="px-4 py-2 whitespace-nowrap">{children}</td>
+/* ✅ FIXED: allows title, colSpan, etc */
+const TableCell = ({
+  children,
+  className = '',
+  ...rest
+}: React.TdHTMLAttributes<HTMLTableCellElement>) => (
+  <td {...rest} className={`px-4 py-2 whitespace-nowrap ${className}`}>
+    {children}
+  </td>
 );
 
 /* ================= STATUS BADGE ================= */
-// const StatusBadge = ({ status }: { status: string }) => {
-//   let cls = 'bg-gray-300 text-gray-800';
-
-//   if (status?.toLowerCase() === 'active') cls = 'bg-green-500 text-white';
-//   if (status?.toLowerCase() === 'disconnected')
-//     cls = 'bg-red-500 text-white';
-
-//   return (
-//     <span className={`px-2 py-1 rounded text-xs font-semibold ${cls}`}>
-//       {status || '-'}
-//     </span>
-//   );
-// };
-
-
 const StatusBadge = ({ status }: { status: string }) => {
   let cls = 'bg-gray-300 text-gray-800';
 
   if (status?.toLowerCase() === 'active') {
     cls = 'bg-green-500 text-white';
   } else if (status?.toLowerCase() === 'disconnected') {
-    cls = 'bg-blue-500 text-white';   // 🔵 DISCONNECTED = BLUE
+    cls = 'bg-blue-500 text-white'; // 🔵 disconnected
   } else if (status?.toLowerCase() === 'decommissioned') {
     cls = 'bg-red-500 text-white';
   }
@@ -1455,7 +1717,7 @@ type ServerItem = {
   extended_support_end_date: string;
 };
 
-/* ================= MAIN ================= */
+/* ================= MAIN COMPONENT ================= */
 export default function ServerTable() {
   const [data, setData] = useState<ServerItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -1467,11 +1729,11 @@ export default function ServerTable() {
     fetch(`${process.env.NEXT_PUBLIC_API_BASE}/agents-info`)
       .then((res) => res.json())
       .then((json) => {
-        const normalized = json.data.map((item: any) => ({
+        const normalized: ServerItem[] = json.data.map((item: any) => ({
           server_environment: item.Server_Environment || '-',
           agent_name: item.Agent_Name || '-',
           ip_address: item.Ip_Address || '-',
-          os_name: item.Os || '-',               // ✅ OS NAME ADDED
+          os_name: item.Os || '-', // ✅ OS name
           server_owner: item.Server_Owner || '-',
           client_name: item.client_name || '-',
           cs_owner: item.cs_owner || '-',
@@ -1485,6 +1747,7 @@ export default function ServerTable() {
       .finally(() => setLoading(false));
   }, []);
 
+  /* filter + sort (expired first) */
   const filtered = data
     .filter((r) =>
       r.server_environment.toLowerCase().includes(search.toLowerCase())
@@ -1501,7 +1764,9 @@ export default function ServerTable() {
 
   return (
     <div className="bg-white p-4 rounded-2xl shadow border">
-      <h2 className="text-lg font-semibold mb-3">Agents Lifecycle Status</h2>
+      <h2 className="text-lg font-semibold mb-3">
+        Agents Lifecycle Status
+      </h2>
 
       <input
         className="border px-3 py-2 rounded mb-4 w-1/3"
@@ -1520,53 +1785,56 @@ export default function ServerTable() {
               <TableHead>Agent</TableHead>
               <TableHead>IP</TableHead>
               <TableHead>Wazuh</TableHead>
-
-              {/* <TableHead>OS Name</TableHead> */}
-              {/* <TableHead>Owner</TableHead> */}
               <TableHead>Client</TableHead>
               <TableHead>CS Owner</TableHead>
               <TableHead>OS Name</TableHead>
-              {/* <TableHead>Wazuh</TableHead> */}
               <TableHead>End of Life</TableHead>
               <TableHead>Extended Support</TableHead>
             </TableRow>
           </TableHeader>
 
           <TableBody>
-            {pageData.map((row, i) => {
-              const eol = getEolMeta(row.end_of_life);
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={9} className="text-center py-6 text-gray-500">
+                  Loading...
+                </TableCell>
+              </TableRow>
+            ) : (
+              pageData.map((row, i) => {
+                const eol = getEolMeta(row.end_of_life);
 
-              return (
-                <TableRow key={i}>
-                  <TableCell>{row.server_environment}</TableCell>
-                  <TableCell>{row.agent_name}</TableCell>
-                  <TableCell>{row.ip_address}</TableCell>
-                  {/* <TableCell>{row.os_name}</TableCell> */}
-                  <TableCell>
-                    <StatusBadge status={row.wazuh_status} />
-                  </TableCell>
-                  {/* <TableCell>{row.server_owner}</TableCell> */}
-                  <TableCell>{row.client_name}</TableCell>
-                  <TableCell>{row.cs_owner}</TableCell>
-                  {/* <TableCell>
-                    <StatusBadge status={row.wazuh_status} />
-                  </TableCell> */}
-                  <TableCell>{row.os_name}</TableCell>
-                  <TableCell title={eol?.tooltip}>
-                    {eol?.className ? (
-                      <span
-                        className={`px-2 py-1 rounded text-xs font-semibold ${eol.className}`}
-                      >
-                        {eol.label}
-                      </span>
-                    ) : (
-                      row.end_of_life
-                    )}
-                  </TableCell>
-                  <TableCell>{row.extended_support_end_date}</TableCell>
-                </TableRow>
-              );
-            })}
+                return (
+                  <TableRow key={i}>
+                    <TableCell>{row.server_environment}</TableCell>
+                    <TableCell>{row.agent_name}</TableCell>
+                    <TableCell>{row.ip_address}</TableCell>
+
+                    <TableCell>
+                      <StatusBadge status={row.wazuh_status} />
+                    </TableCell>
+
+                    <TableCell>{row.client_name}</TableCell>
+                    <TableCell>{row.cs_owner}</TableCell>
+                    <TableCell>{row.os_name}</TableCell>
+
+                    <TableCell title={eol?.tooltip}>
+                      {eol?.className ? (
+                        <span
+                          className={`px-2 py-1 rounded text-xs font-semibold ${eol.className}`}
+                        >
+                          {eol.label}
+                        </span>
+                      ) : (
+                        row.end_of_life
+                      )}
+                    </TableCell>
+
+                    <TableCell>{row.extended_support_end_date}</TableCell>
+                  </TableRow>
+                );
+              })
+            )}
           </TableBody>
         </Table>
       </div>
@@ -1576,7 +1844,7 @@ export default function ServerTable() {
           <button
             disabled={page === 1}
             onClick={() => setPage((p) => p - 1)}
-            className="px-3 py-1 bg-gray-200 rounded"
+            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
           >
             Prev
           </button>
@@ -1586,7 +1854,7 @@ export default function ServerTable() {
           <button
             disabled={page === totalPages}
             onClick={() => setPage((p) => p + 1)}
-            className="px-3 py-1 bg-gray-200 rounded"
+            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
           >
             Next
           </button>
