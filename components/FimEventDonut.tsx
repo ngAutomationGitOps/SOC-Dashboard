@@ -100,23 +100,23 @@ export default function FimEventDonut() {
       {/* Custom Legend */}
       {isClient && chartData.length > 0 && (
         <ul className="flex flex-wrap justify-center gap-4 mt-4 text-sm">
-          {chartData.map((entry, idx) => {
-            const color =
-              EVENT_COLORS[entry.name] || FALLBACK_COLORS[idx % FALLBACK_COLORS.length];
-            return (
-              <li key={idx} className="flex items-center gap-2">
-                <span
-                  className="inline-block w-3 h-3 rounded-full"
-                  style={{ backgroundColor: color }}
-                ></span>
-                <span className="text-gray-700 font-medium">{entry.name}</span>
-                <span className="ml-1 text-gray-500">
-                  ({entry.value.toLocaleString()})
-                </span>
-              </li>
-            );
-          })}
-        </ul>
+        {chartData.map((entry, idx) => {
+          const color =
+            EVENT_COLORS[entry.name] || FALLBACK_COLORS[idx % FALLBACK_COLORS.length];
+          return (
+            <li key={idx} className="flex items-center gap-2">
+              <span
+                className="inline-block w-3 h-3 rounded-full"
+                style={{ backgroundColor: color }}
+              ></span>
+              <span className="text-gray-700 font-medium">{entry.name}</span>
+              <span className="ml-1 text-gray-500">
+                ({entry.value.toLocaleString()})
+              </span>
+            </li>
+          );
+        })}
+      </ul>
       )}
     </div>
   );

@@ -530,9 +530,9 @@ export default function CveSummaryTable() {
   const currentItems = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div className="bg-white rounded-lg shadow p-6 border">
+    <div className="h-full flex flex-col">
       {/* 🔍 Search + Severity Filter */}
-      <div className="mb-4 flex justify-between items-center gap-4">
+      <div className="mb-4 flex justify-between items-center gap-4 flex-shrink-0">
         <input
           type="text"
           placeholder="Filter by CVE ID..."
@@ -560,38 +560,44 @@ export default function CveSummaryTable() {
         </select>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full text-sm text-left border">
-          <thead className="bg-gray-100 font-semibold text-gray-700">
+      {/* Table Container */}
+      <div className="flex-1 overflow-auto">
+        <table className="min-w-full table-auto text-sm">
+          <thead className="bg-gray-50 sticky top-0">
             <tr>
-              <th className="px-4 py-2 border">CVE ID</th>
-              <th className="px-4 py-2 border">Severity</th>
-              <th className="px-4 py-2 border">Count</th>
+              <th className="px-4 py-3 text-left font-semibold text-gray-700">CVE ID</th>
+              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-24">Severity</th>
+              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-20">Count</th>
             </tr>
           </thead>
           <tbody>
             {currentItems.length > 0 ? (
               currentItems.map((item, index) => (
-                <tr key={index} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-2 border font-mono">{item.cve_id}</td>
-                  <td className="px-4 py-2 border text-sm capitalize">
+                <tr key={index} className="border-b last:border-b-0 hover:bg-gray-50 text-sm">
+                  <td className="px-4 py-3 font-mono">{item.cve_id}</td>
+                  <td className="px-4 py-3 text-center">
                     <span
-                      className="inline-block px-2 py-1 rounded text-white font-semibold"
-                      style={{
-                        backgroundColor:
-                          severityColors[item.severity] || severityColors.Default,
-                      }}
+                      className={`px-3 py-1 rounded-md text-xs font-semibold ${
+                        item.severity.toLowerCase() === 'critical'
+                          ? 'bg-red-600 text-white'
+                          : item.severity.toLowerCase() === 'high'
+                          ? 'bg-orange-500 text-white'
+                          : item.severity.toLowerCase() === 'medium'
+                          ? 'bg-yellow-400 text-yellow-900'
+                          : item.severity.toLowerCase() === 'low'
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-gray-100 text-gray-600'
+                      }`}
                     >
                       {item.severity}
                     </span>
                   </td>
-                  <td className="px-4 py-2 border font-semibold">{item.count}</td>
+                  <td className="px-4 py-3 text-center font-semibold">{item.count.toLocaleString()}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={3} className="text-center py-4 text-gray-500">
+                <td colSpan={3} className="text-center py-6 text-gray-400">
                   No CVEs found
                 </td>
               </tr>

@@ -18,10 +18,10 @@ export default function DashboardPage() {
           <div className="relative z-10">
             <h1 className="text-3xl lg:text-4xl font-bold mb-3 tracking-tight">
               Agent Management Dashboard
-            </h1>
+          </h1>
             <p className="text-cyan-100 text-lg lg:text-xl opacity-90">
               Comprehensive agent deployment and monitoring across your infrastructure
-            </p>
+          </p>
           </div>
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
           <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
@@ -45,7 +45,7 @@ export default function DashboardPage() {
 
         {/* CVE Details Table - Full Width */}
         <div className="dashboard-card">
-          <AgentCveDetailsTable />
+            <AgentCveDetailsTable />
         </div>
       </div>
     </SidebarLayout>

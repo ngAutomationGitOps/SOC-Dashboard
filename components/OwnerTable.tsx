@@ -129,37 +129,96 @@ export default function OwnerTable() {
   }, []);
 
   return (
-    <div className="bg-white rounded-lg shadow p-6 border">
+    <div className="h-full flex flex-col">
+      <div className="flex-1 overflow-auto">
       {loading ? (
-        <p className="text-center">Loading...</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm text-left border">
-            <thead className="bg-gray-100">
+          <div className="flex items-center justify-center h-full">
+            <p className="text-gray-500">Loading...</p>
+          </div>
+        ) : (
+          <table className="min-w-full table-auto text-sm">
+            <thead className="bg-gray-50 sticky top-0">
               <tr>
-                <th className="px-4 py-2 border">Department</th>
-                <th className="px-4 py-2 border">Critical</th>
-                <th className="px-4 py-2 border">High</th>
-                <th className="px-4 py-2 border">Medium</th>
-                <th className="px-4 py-2 border">Low</th>
-                <th className="px-4 py-2 border font-bold text-black">Total</th>
+                <th className="px-4 py-3 text-left font-semibold text-gray-700">Department</th>
+                <th className="px-4 py-3 text-center font-semibold text-gray-700 w-20">Critical</th>
+                <th className="px-4 py-3 text-center font-semibold text-gray-700 w-20">High</th>
+                <th className="px-4 py-3 text-center font-semibold text-gray-700 w-20">Medium</th>
+                <th className="px-4 py-3 text-center font-semibold text-gray-700 w-20">Low</th>
+                <th className="px-4 py-3 text-center font-semibold text-gray-700 w-24">Total</th>
               </tr>
             </thead>
+
             <tbody>
               {data.map((row, idx) => (
-                <tr key={idx} className="border-b">
-                  <td className="px-4 py-2 border">{row.owner}</td>
-                  <td className="px-4 py-2 border">{row.critical}</td>
-                  <td className="px-4 py-2 border">{row.high}</td>
-                  <td className="px-4 py-2 border">{row.medium}</td>
-                  <td className="px-4 py-2 border">{row.low}</td>
-                  <td className="px-4 py-2 border font-bold">{row.total}</td>
+                <tr
+                  key={idx}
+                  className="border-b last:border-b-0 hover:bg-gray-50 text-sm"
+                >
+                  <td className="px-4 py-3">{row.owner}</td>
+
+                  <td className="px-4 py-3 text-center">
+                    <span
+                      className={`px-3 py-1 rounded-md text-xs font-semibold ${
+                        row.critical > 0
+                          ? 'bg-red-600 text-white'
+                          : 'bg-gray-100 text-gray-600'
+                      }`}
+                    >
+                      {row.critical.toLocaleString()}
+                    </span>
+                  </td>
+
+                  <td className="px-4 py-3 text-center">
+                    <span
+                      className={`px-3 py-1 rounded-md text-xs font-semibold ${
+                        row.high > 0
+                          ? 'bg-orange-500 text-white'
+                          : 'bg-gray-100 text-gray-600'
+                      }`}
+                    >
+                      {row.high.toLocaleString()}
+                    </span>
+                  </td>
+
+                  <td className="px-4 py-3 text-center">
+                    <span
+                      className={`px-3 py-1 rounded-md text-xs font-semibold ${
+                        row.medium > 0
+                          ? 'bg-yellow-400 text-yellow-900'
+                          : 'bg-gray-100 text-gray-600'
+                      }`}
+                    >
+                      {row.medium.toLocaleString()}
+                    </span>
+                  </td>
+
+                  <td className="px-4 py-3 text-center">
+                    <span
+                      className={`px-3 py-1 rounded-md text-xs font-semibold ${
+                        row.low > 0
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-gray-100 text-gray-600'
+                      }`}
+                    >
+                      {row.low.toLocaleString()}
+                    </span>
+                  </td>
+
+                  <td className="px-4 py-3 text-center font-semibold">{row.total.toLocaleString()}</td>
                 </tr>
               ))}
+
+              {data.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="text-center py-6 text-gray-400">
+                    No data available
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
+        )}
         </div>
-      )}
     </div>
   );
 }

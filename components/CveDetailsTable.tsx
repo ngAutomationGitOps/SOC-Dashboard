@@ -550,21 +550,20 @@ export default function CveDetailsTable() {
             />
           </div>
 
+          {/* Table Container */}
           <div className="flex-1 overflow-auto">
-            <table style={{ ...styles.table, width: '100%' }}>
-              <thead>
+            <table className="min-w-full table-auto text-sm">
+              <thead className="bg-gray-50 sticky top-0">
                 <tr>
-                  <th style={{ ...styles.th, width: '180px', backgroundColor: '#f3f4f6' }}>
-                    CVE ID
-                  </th>
-                  <th style={{ ...styles.th, backgroundColor: '#f3f4f6' }}>Description</th>
-                  <th style={{ ...styles.th, backgroundColor: '#f3f4f6' }}>Remediation</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-700 w-48">CVE ID</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-700">Description</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-700">Remediation</th>
                 </tr>
               </thead>
               <tbody>
                   {visibleList.length === 0 ? (
                     <tr>
-                      <td colSpan={3} style={{ textAlign: 'center', padding: '12px' }}>
+                    <td colSpan={3} className="text-center py-6 text-gray-400">
                         No CVEs found
                       </td>
                     </tr>
@@ -572,39 +571,38 @@ export default function CveDetailsTable() {
                     visibleList.map((item, index) => (
                       <tr
                         key={startIndex + index}
-                        style={{
-                          backgroundColor: index % 2 === 0 ? '#f9fafb' : '#fff',
-                          cursor: 'pointer',
-                        }}
+                      className="border-b last:border-b-0 hover:bg-gray-50 text-sm cursor-pointer"
                         onClick={() => toggleRow(startIndex + index)}
                       >
-                        <td style={{ ...styles.td, width: '180px' }}>{item.cve_id}</td>
-                        <td style={styles.td}>
+                      <td className="px-4 py-3 font-mono font-semibold text-gray-900">{item.cve_id}</td>
+                      <td className="px-4 py-3 text-gray-700">
                           <div
+                          className={`overflow-hidden ${
+                            isExpanded(startIndex + index) ? '' : 'line-clamp-2'
+                          }`}
                             style={{
-                              whiteSpace: 'pre-wrap',
-                              overflow: 'hidden',
-                              display: '-webkit-box',
+                            display: isExpanded(startIndex + index) ? 'block' : '-webkit-box',
                               WebkitLineClamp: isExpanded(startIndex + index) ? 'unset' : 2,
                               WebkitBoxOrient: 'vertical',
+                            wordBreak: 'break-word',
                             }}
                           >
                             {item.description}
                           </div>
-                          <div style={styles.more}>
-                            {isExpanded(startIndex + index)
-                              ? '▲ Show Less'
-                              : '▼ Show More'}
+                        <div className="text-xs text-blue-600 mt-1 font-medium cursor-pointer">
+                          {isExpanded(startIndex + index) ? '▲ Show Less' : '▼ Show More'}
                           </div>
                         </td>
-                        <td style={styles.td}>
+                      <td className="px-4 py-3 text-gray-700">
                           <div
+                          className={`overflow-hidden ${
+                            isExpanded(startIndex + index) ? '' : 'line-clamp-2'
+                          }`}
                             style={{
-                              whiteSpace: 'pre-wrap',
-                              overflow: 'hidden',
-                              display: '-webkit-box',
+                            display: isExpanded(startIndex + index) ? 'block' : '-webkit-box',
                               WebkitLineClamp: isExpanded(startIndex + index) ? 'unset' : 2,
                               WebkitBoxOrient: 'vertical',
+                            wordBreak: 'break-word',
                             }}
                           >
                             {item.remediation}

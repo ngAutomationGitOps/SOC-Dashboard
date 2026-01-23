@@ -175,33 +175,78 @@ export default function PortsSummaryTable() {
   );
 
   return (
-    <div className="h-full flex flex-col p-4">
-      <h3 className="text-lg lg:text-xl font-semibold text-gray-800 mb-4 text-center">
-        Ports Summary
-      </h3>
-      <div className="flex-1 overflow-auto">
-        <table style={styles.table}>
-        <thead>
+    <div className="h-full flex flex-col p-4 lg:p-6">
+      {/* Header */}
+      <div className="flex items-center space-x-3 mb-4 lg:mb-6 flex-shrink-0">
+        <div className="p-2 lg:p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg flex-shrink-0">
+          <svg className="w-4 h-4 lg:w-5 lg:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9" />
+          </svg>
+        </div>
+        <div className="min-w-0 flex-1">
+          <h3 className="text-lg lg:text-xl font-bold text-gray-900 tracking-tight">Ports Summary</h3>
+          <p className="text-sm text-gray-600 font-medium">Open ports analysis by domain</p>
+        </div>
+      </div>
+
+      {/* Table Container */}
+      <div className="flex-1 overflow-auto px-2">
+        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+          <table className="min-w-full table-auto text-sm">
+            <thead className="bg-gray-50">
           <tr>
-            <th style={styles.th}>DOMAIN</th>
-            <th style={styles.th}>DEFAULT</th>
-            <th style={styles.th}>CUSTOM</th>
-            <th style={styles.th}>TOTAL</th>
+                <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b border-gray-200 w-48">DOMAIN</th>
+                <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b border-gray-200">DEFAULT</th>
+                <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b border-gray-200">CUSTOM</th>
+                <th className="px-4 py-3 text-center font-semibold text-gray-700 border-b border-gray-200 w-20">TOTAL</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((row, i) => (
-            <tr key={i} style={styles.tr}>
-              <td style={styles.td}>{row.domain}</td>
-              <td style={styles.td}>{renderPorts(row.defaultPorts)}</td>
-              <td style={styles.td}>{renderPorts(row.customPorts)}</td>
-              <td style={{ ...styles.td, textAlign: 'center', fontWeight: 'bold' }}>
+              {data.map((row, index) => (
+                <tr key={index} className="border-b border-gray-100 last:border-b-0 hover:bg-gray-50 text-sm">
+                  <td className="px-4 py-3 font-medium text-gray-900">{row.domain}</td>
+                  <td className="px-4 py-3">
+                    <div className="flex flex-wrap gap-2">
+                      {row.defaultPorts.map((port, i) => (
+                        <span
+                          key={i}
+                          className="px-2 py-1 rounded-md text-xs font-semibold text-white"
+                          style={{ backgroundColor: portColors[port] || '#757575' }}
+                        >
+                          {port}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex flex-wrap gap-2">
+                      {row.customPorts.map((port, i) => (
+                        <span
+                          key={i}
+                          className="px-2 py-1 rounded-md text-xs font-semibold text-white"
+                          style={{ backgroundColor: portColors[port] || '#757575' }}
+                        >
+                          {port}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-center font-bold text-gray-900">
                 {row.total}
               </td>
             </tr>
           ))}
+
+              {data.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="text-center py-8 text-gray-400">
+                    No port data available
+                  </td>
+                </tr>
+              )}
         </tbody>
-        </table>
+      </table>
+        </div>
       </div>
     </div>
   );

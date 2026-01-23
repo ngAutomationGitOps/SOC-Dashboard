@@ -185,43 +185,73 @@ const ports = [
 
 export default function PortsRow() {
   return (
-    <div className="bg-white rounded-xl shadow p-4 mb-4">
-      <div className="flex">
-        {/* Fixed first column */}
-        <div className="flex flex-col text-center border w-20">
-          <div className="bg-gray-600 text-white text-xs font-bold py-1">
-            PORTS
-          </div>
-          <div className="bg-gray-400 text-white text-xs font-bold py-1">
-            COUNT
-          </div>
+    <div className="h-full flex flex-col p-4 lg:p-6">
+      {/* Header */}
+      <div className="flex items-center space-x-3 mb-3 lg:mb-4 flex-shrink-0">
+        <div className="p-2 lg:p-3 bg-gradient-to-br from-sky-500 to-indigo-600 rounded-xl shadow-lg flex-shrink-0">
+          <svg
+            className="w-4 h-4 lg:w-5 lg:h-5 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 7h16M4 12h16M4 17h16"
+            />
+          </svg>
         </div>
+        <div className="min-w-0 flex-1">
+          <h3 className="text-lg lg:text-xl font-bold text-gray-900 tracking-tight">
+            Open Ports Overview
+          </h3>
+          <p className="text-sm text-gray-600 font-medium">
+            Distribution of monitored service ports and counts
+          </p>
+        </div>
+      </div>
 
-        {/* Dynamic ports */}
-        <div className="flex-1">
-          {/* Header Row */}
-          <div className="flex">
-            {ports.map((p, i) => (
-              <div
-                key={i}
-                className="flex-1 text-center text-xs font-semibold text-white py-1 border"
-                style={{ backgroundColor: p.color }}
-              >
-                {p.name}
-              </div>
-            ))}
+      {/* Ports Matrix */}
+      <div className="flex-1 overflow-x-auto px-1 lg:px-2">
+        <div className="inline-flex min-w-full rounded-lg border border-gray-200 bg-white overflow-hidden">
+          {/* Fixed first column */}
+          <div className="flex flex-col text-center min-w-[80px] border-r border-gray-200">
+            <div className="bg-gray-800 text-white text-[11px] lg:text-xs font-semibold py-2 border-b border-gray-700">
+              PORTS
+            </div>
+            <div className="bg-gray-600 text-white text-[11px] lg:text-xs font-semibold py-2">
+              COUNT
+            </div>
           </div>
 
-          {/* Counts Row */}
-          <div className="flex">
-            {ports.map((p, i) => (
-              <div
-                key={i}
-                className="flex-1 text-center text-sm font-bold border py-1"
-              >
-                {p.count}
-              </div>
-            ))}
+          {/* Dynamic ports */}
+          <div className="flex-1">
+            {/* Header Row */}
+            <div className="flex divide-x divide-white/10">
+              {ports.map((p, i) => (
+                <div
+                  key={i}
+                  className="flex-1 text-center text-[13px] font-semibold text-white py-2 px-1"
+                  style={{ backgroundColor: p.color }}
+                >
+                  <span className="inline-block leading-snug">{p.name}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Counts Row */}
+            <div className="flex border-t border-gray-200 bg-gray-50 divide-x divide-gray-200">
+              {ports.map((p, i) => (
+                <div
+                  key={i}
+                  className="flex-1 text-center text-xs lg:text-sm font-semibold text-gray-900 py-2 px-1"
+                >
+                  {p.count}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

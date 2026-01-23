@@ -60,28 +60,28 @@ export default function FimEventBar() {
 
       <div className="flex-1">
         <ResponsiveContainer width="100%" height="100%">
-          {isClient && chartData.length > 0 ? (
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="event" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-                {chartData.map((entry, idx) => (
-                  <Cell
-                    key={`cell-${idx}`}
-                    fill={EVENT_COLORS[entry.event] || '#999999'} // fallback if missing
-                  />
-                ))}
-              </Bar>
-            </BarChart>
-          ) : (
+        {isClient && chartData.length > 0 ? (
+          <BarChart data={chartData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="event" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+              {chartData.map((entry, idx) => (
+                <Cell
+                  key={`cell-${idx}`}
+                  fill={EVENT_COLORS[entry.event] || '#999999'} // fallback if missing
+                />
+              ))}
+            </Bar>
+          </BarChart>
+        ) : (
             <div className="flex items-center justify-center h-full">
               <p className="text-center text-gray-500">Loading...</p>
             </div>
-          )}
-        </ResponsiveContainer>
+        )}
+      </ResponsiveContainer>
       </div>
     </div>
   );

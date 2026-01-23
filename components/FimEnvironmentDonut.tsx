@@ -79,64 +79,64 @@ export default function FimEnvironmentDonut() {
           </div>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={data}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={100}
-                paddingAngle={2}
-                labelLine={true}
-                label={({ name, percent = 0, x, y, cx }) => {
-                  const textAnchor = x > cx ? 'start' : 'end';
-                  return (
-                    <text
-                      x={x}
-                      y={y}
-                      textAnchor={textAnchor}
-                      dominantBaseline="central"
-                      fill="#374151"
-                      fontSize={12}
-                    >
-                      {`${name} (${(percent * 100).toFixed(0)}%)`}
-                    </text>
-                  );
-                }}
-              >
-                {data.map((_, idx) => {
-                  // Top 3 → Red family colors
-                  if (idx < 3) {
-                    return (
-                      <Cell
-                        key={`cell-${idx}`}
-                        fill={HIGHLIGHT_COLORS[idx]}
-                        stroke="#fff"
-                        strokeWidth={1}
-                      />
-                    );
-                  }
-                  // Others → fallback COLORS
-                  return (
-                    <Cell
-                      key={`cell-${idx}`}
-                      fill={COLORS[idx % COLORS.length]}
-                      stroke="#fff"
-                      strokeWidth={1}
-                    />
-                  );
-                })}
-              </Pie>
-              <Tooltip />
-              <Legend
-                verticalAlign="bottom"
-                iconType="circle"
-                wrapperStyle={{ fontSize: 12 }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
+        <PieChart>
+          <Pie
+            data={data}
+            dataKey="value"
+            nameKey="name"
+            cx="50%"
+            cy="50%"
+            innerRadius={60}
+            outerRadius={100}
+            paddingAngle={2}
+            labelLine={true}
+            label={({ name, percent = 0, x, y, cx }) => {
+  const textAnchor = x > cx ? 'start' : 'end';
+  return (
+    <text
+      x={x}
+      y={y}
+      textAnchor={textAnchor}
+      dominantBaseline="central"
+      fill="#374151"
+      fontSize={12}
+    >
+      {`${name} (${(percent * 100).toFixed(0)}%)`}
+    </text>
+  );
+}}
+          >
+            {data.map((_, idx) => {
+              // Top 3 → Red family colors
+              if (idx < 3) {
+                return (
+                  <Cell
+                    key={`cell-${idx}`}
+                    fill={HIGHLIGHT_COLORS[idx]}
+                    stroke="#fff"
+                    strokeWidth={1}
+                  />
+                );
+              }
+              // Others → fallback COLORS
+              return (
+                <Cell
+                  key={`cell-${idx}`}
+                  fill={COLORS[idx % COLORS.length]}
+                  stroke="#fff"
+                  strokeWidth={1}
+                />
+              );
+            })}
+          </Pie>
+          <Tooltip />
+          <Legend
+            verticalAlign="bottom"
+            iconType="circle"
+            wrapperStyle={{ fontSize: 12 }}
+          />
+        </PieChart>
+      </ResponsiveContainer>
         )}
       </div>
     </div>

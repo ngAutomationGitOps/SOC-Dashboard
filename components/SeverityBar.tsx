@@ -194,16 +194,16 @@ const SeverityBreakdownByOS = () => {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200 flex items-center justify-center h-96">
-        <div className="text-gray-500">Loading data...</div>
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="text-gray-500 text-sm">Loading data...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200 flex items-center justify-center h-96">
-        <div className="text-red-500">{error}</div>
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="text-red-500 text-sm">{error}</div>
       </div>
     );
   }
