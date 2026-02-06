@@ -84,7 +84,7 @@ export default function EventMap() {
 
   // Helper: find a Geo feature for a given API country name
   const matchGeo = (apiName: string) => {
-    if (!geoFeatures.length) return undefined;  
+    if (!geoFeatures.length) return undefined;
     const targetName = COUNTRY_NAME_MAP[apiName] || apiName;
 
     // exact normalized match
@@ -189,12 +189,14 @@ export default function EventMap() {
               </Geographies>
             )}
 
-            {/* Enhanced Markers */}
+            {/* Enhanced Markers (count + country name ONLY for data countries) */}
             {eventData.map((row, idx) => {
               const matchedGeo = matchGeo(row.country);
 
               if (matchedGeo) {
                 const [lng, lat] = geoCentroid(matchedGeo);
+                const countryName = matchedGeo.properties.name;
+
                 return (
                   <Marker key={`${row.country}-${idx}`} coordinates={[lng, lat]}>
                     <circle
@@ -204,18 +206,36 @@ export default function EventMap() {
                       strokeWidth={2}
                       style={{ filter: 'drop-shadow(0 4px 8px rgba(249, 115, 22, 0.4))' }}
                     />
+
+                    {/* Event count */}
                     <text
                       textAnchor="middle"
                       y={-12}
                       style={{
                         fontFamily: 'Inter, sans-serif',
                         fontSize: 'clamp(10px, 2vw, 12px)',
-                        fontWeight: '600',
+                        fontWeight: 600,
                         fill: '#1f2937',
                         textShadow: '0 1px 2px rgba(0,0,0,0.1)',
                       }}
                     >
                       {row.count}
+                    </text>
+
+                    {/* ✅ Country name (ONLY when data exists) */}
+                    <text
+                      textAnchor="middle"
+                      y={16}
+                      style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '15px',
+                        fontWeight: 500,
+                        fill: '#374151',
+                        pointerEvents: 'none',
+                        textShadow: '0 1px 1px rgba(255,255,255,0.6)',
+                      }}
+                    >
+                      {countryName}
                     </text>
                   </Marker>
                 );
@@ -235,24 +255,25 @@ export default function EventMap() {
                       strokeWidth={2}
                       style={{ filter: 'drop-shadow(0 4px 8px rgba(249, 115, 22, 0.4))' }}
                     />
+
+                    {/* Optional: show country name for fallback too */}
                     <text
                       textAnchor="middle"
-                      y={-12}
+                      y={16}
                       style={{
                         fontFamily: 'Inter, sans-serif',
-                        fontSize: 'clamp(10px, 2vw, 12px)',
-                        fontWeight: '600',
-                        fill: '#1f2937',
-                        textShadow: '0 1px 2px rgba(0,0,0,0.1)',
+                        fontSize: '10px',
+                        fontWeight: 500,
+                        fill: '#374151',
+                        pointerEvents: 'none',
                       }}
                     >
-                      {row.count}
+                      {row.country}
                     </text>
                   </Marker>
                 );
               }
 
-              console.debug('No coords for country:', row.country);
               return null;
             })}
           </ZoomableGroup>
